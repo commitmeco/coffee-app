@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  /* Coffee-inspired color palette */
+  --color-cream: #FFF8F0;
+  --color-cream-dark: #F5EDE3;
+  --color-espresso: #2C1810;
+  --color-espresso-light: #4A3228;
+  --color-roast: #6B3A2A;
+  --color-roast-light: #8B5E3C;
+  --color-caramel: #C4813D;
+  --color-caramel-light: #D4A574;
+  --color-honey: #E8B960;
+  --color-sage: #7A8B6F;
+  --color-sage-light: #A3B299;
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Georgia", ui-serif, serif;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-espresso);
+}
+
+/* Score badge colors */
+.score-outstanding {
+  background-color: #065f46;
+  color: white;
+}
+.score-excellent {
+  background-color: var(--color-sage);
+  color: white;
+}
+.score-very-good {
+  background-color: var(--color-caramel);
+  color: white;
+}
