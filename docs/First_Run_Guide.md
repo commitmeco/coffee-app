@@ -14,7 +14,7 @@ The goal is simple: ship a great product faster by combining human creativity, d
 
 Coffee App is a community-driven platform that helps people discover, learn about, and enjoy coffee beans from around the world. It's designed to feel like a knowledgeable friend — approachable, personal, and never snobby.
 
-We're in the early skeleton phase. The repo has structure but most directories are empty, which means there's a lot of room to shape things. For full product context, read `docs/VISION.md` in the repo.
+We've completed Phase 1 — the bean catalog, search/filtering, and detail pages are built and running on Next.js + Tailwind (Option B from Hassan's proposal). There's still plenty of room to shape things as we move into Phase 2. For full product context, read `docs/VISION.md` in the repo.
 
 ## Our Collaboration Model
 
@@ -106,10 +106,15 @@ Here's where things live so you can point Claude (and each other) to the right p
 
 | Path | What's There |
 |------|-------------|
+| `CLAUDE.md` | Guidelines for Claude Code — read this first |
 | `docs/VISION.md` | Product vision, principles, and planned phases |
-| `src/app/` | Main application code (empty — ready to build) |
-| `src/components/` | Shared UI components |
-| `src/data/` | Bean data and models |
+| `docs/PROPOSAL.md` | Hassan's build proposal with tech stack options |
+| `src/app/layout.tsx` | Root layout — Navbar, Footer, global styles |
+| `src/app/page.tsx` | Homepage — bean catalog with search and filters |
+| `src/app/beans/[id]/page.tsx` | Bean detail pages with cupping scores |
+| `src/components/` | Reusable UI components (BeanCard, SearchBar, Filters, etc.) |
+| `src/lib/beans.ts` | Bean types, data loading, filtering, and scoring logic |
+| `src/data/` | Bean JSON data, flavor taxonomy, and schema docs |
 | `public/` | Static assets (images, icons) |
 | `tests/` | Test files |
 
@@ -125,6 +130,6 @@ A few principles to keep our collaboration healthy:
 
 ## Let's Build Something Great
 
-The project is early, the folders are mostly empty, and that's exactly the exciting part. You have a collaborator who's ready to help whenever you are.
+Phase 1 is built — the catalog, search, and detail pages are live. Now the fun part: shaping the experience, adding personalization, and building community features. You have a collaborator who's ready to help whenever you are.
 
-Open the repo, pick a task from `VISION.md`, and start a conversation. The first run starts now.
+Open the repo, pick a task from `VISION.md`, and start a conversation.
