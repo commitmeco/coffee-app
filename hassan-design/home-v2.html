@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Field Guide — V2 Compact Data-Rich</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0e;
+    --bg-card: #141416;
+    --bg-hover: #1a1a1e;
+    --border: #222228;
+    --border-hover: #333340;
+    --text: #d4d4d8;
+    --text-muted: #71717a;
+    --text-dim: #52525b;
+    --green: #4ade80;
+    --amber: #fbbf24;
+    --rose: #fb7185;
+    --cyan: #22d3ee;
+    --violet: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,12,14,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    gap: 2rem;
+  }
+  .topbar-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: -0.02em;
+  }
+  .topbar-nav { display: flex; gap: 0.25rem; }
+  .topbar-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+  .topbar-nav a:hover,
+  .topbar-nav a.active {
+    background: var(--bg-hover);
+    color: var(--text);
+  }
+  .topbar-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+  .topbar-stats strong { color: var(--text-muted); }
+
+  /* Filter bar */
+  .filter-bar {
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    color: var(--text-dim);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 0.5rem;
+  }
+  .filter-chip {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 0.3rem 0.65rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-chip:hover { border-color: var(--border-hover); color: var(--text); }
+  .filter-chip.active {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(74,222,128,0.05);
+  }
+  .filter-sep {
+    width: 1px; height: 16px;
+    background: var(--border);
+    margin: 0 0.5rem;
+  }
+  .search-input {
+    margin-left: auto;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 3px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input::placeholder { color: var(--text-dim); }
+  .search-input:focus { border-color: var(--green); }
+
+  /* Column headers */
+  .col-header {
+    display: grid;
+    grid-template-columns: 200px 100px 1fr 1fr 1fr 180px;
+    gap: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    position: sticky;
+    top: 48px;
+    background: rgba(12,12,14,0.95);
+    backdrop-filter: blur(16px);
+    z-index: 50;
+  }
+
+  /* Bean rows */
+  .bean-row {
+    display: grid;
+    grid-template-columns: 200px 100px 1fr 1fr 1fr 180px;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid rgba(34,34,40,0.5);
+    align-items: center;
+    transition: background 0.15s;
+    cursor: pointer;
+    opacity: 0;
+    animation: rowIn 0.3s forwards;
+  }
+  .bean-row:nth-child(1) { animation-delay: 0.1s; }
+  .bean-row:nth-child(2) { animation-delay: 0.15s; }
+  .bean-row:nth-child(3) { animation-delay: 0.2s; }
+  .bean-row:nth-child(4) { animation-delay: 0.25s; }
+  .bean-row:nth-child(5) { animation-delay: 0.3s; }
+  .bean-row:nth-child(6) { animation-delay: 0.35s; }
+  .bean-row:nth-child(7) { animation-delay: 0.4s; }
+  .bean-row:nth-child(8) { animation-delay: 0.45s; }
+
+  .bean-row:hover { background: var(--bg-hover); }
+
+  .cell-name {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cell-name strong {
+    font-weight: 500;
+    color: var(--text);
+    font-size: 12px;
+  }
+  .cell-name small {
+    color: var(--text-dim);
+    font-size: 10px;
+  }
+
+  .cell-origin {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .origin-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  .origin-dot.ethiopia { background: var(--amber); }
+  .origin-dot.colombia { background: var(--green); }
+  .origin-dot.kenya { background: var(--rose); }
+  .origin-dot.guatemala { background: var(--violet); }
+  .origin-dot.costa-rica { background: var(--cyan); }
+
+  /* Score bars */
+  .cell-score {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .score-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+  .score-bar-fill.acidity { background: var(--amber); }
+  .score-bar-fill.body { background: var(--cyan); }
+  .score-bar-fill.sweetness { background: var(--rose); }
+
+  .score-num {
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 28px;
+    text-align: right;
+    font-weight: 400;
+  }
+
+  /* Tags */
+  .cell-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  .micro-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 2px;
+    background: rgba(74,222,128,0.06);
+    border: 1px solid rgba(74,222,128,0.15);
+    color: var(--green);
+  }
+  .micro-tag:nth-child(2) {
+    background: rgba(251,191,36,0.06);
+    border-color: rgba(251,191,36,0.15);
+    color: var(--amber);
+  }
+  .micro-tag:nth-child(3) {
+    background: rgba(167,139,250,0.06);
+    border-color: rgba(167,139,250,0.15);
+    color: var(--violet);
+  }
+
+  /* Summary bar */
+  .summary-bar {
+    position: sticky;
+    bottom: 0;
+    background: rgba(12,12,14,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    padding: 0.65rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .summary-bar .legend {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 8px; height: 3px;
+    border-radius: 1px;
+  }
+
+  @keyframes rowIn {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 900px) {
+    .col-header, .bean-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .col-header { display: none; }
+    .bean-row { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">cfg://</span>
+  <div class="topbar-nav">
+    <a href="#" class="active">Beans</a>
+    <a href="#">Origins</a>
+    <a href="#">Flavors</a>
+    <a href="#">Compare</a>
+  </div>
+  <div class="topbar-stats">
+    <span><strong>20</strong> beans</span>
+    <span><strong>5</strong> origins</span>
+    <span><strong>42</strong> flavors</span>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <span class="filter-label">Origin</span>
+  <button class="filter-chip active">All</button>
+  <button class="filter-chip">Ethiopia</button>
+  <button class="filter-chip">Colombia</button>
+  <button class="filter-chip">Kenya</button>
+  <button class="filter-chip">Guatemala</button>
+  <button class="filter-chip">Costa Rica</button>
+  <div class="filter-sep"></div>
+  <span class="filter-label">Score</span>
+  <button class="filter-chip">High Acidity</button>
+  <button class="filter-chip">Full Body</button>
+  <button class="filter-chip">Sweet</button>
+  <input type="text" class="search-input" placeholder="Search beans...">
+</div>
+
+<div class="col-header">
+  <span>Bean</span>
+  <span>Origin</span>
+  <span>Acidity</span>
+  <span>Body</span>
+  <span>Sweetness</span>
+  <span>Flavors</span>
+</div>
+
+<div class="bean-list">
+  <div class="bean-row">
+    <div class="cell-name"><strong>Yirgacheffe Natural</strong><small>Onyx Coffee Lab</small></div>
+    <div class="cell-origin"><span class="origin-dot ethiopia"></span>Ethiopia</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:90%"></div></div><span class="score-num">8.75</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:55%"></div></div><span class="score-num">7.50</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:82%"></div></div><span class="score-num">8.25</span></div>
+    <div class="cell-tags"><span class="micro-tag">blueberry</span><span class="micro-tag">jasmine</span><span class="micro-tag">bergamot</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Huila Supremo</strong><small>Counter Culture</small></div>
+    <div class="cell-origin"><span class="origin-dot colombia"></span>Colombia</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:72%"></div></div><span class="score-num">8.00</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:78%"></div></div><span class="score-num">8.17</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:70%"></div></div><span class="score-num">7.92</span></div>
+    <div class="cell-tags"><span class="micro-tag">caramel</span><span class="micro-tag">red apple</span><span class="micro-tag">cocoa</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Nyeri AA</strong><small>Heart Coffee</small></div>
+    <div class="cell-origin"><span class="origin-dot kenya"></span>Kenya</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:92%"></div></div><span class="score-num">8.83</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:65%"></div></div><span class="score-num">7.75</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:68%"></div></div><span class="score-num">7.83</span></div>
+    <div class="cell-tags"><span class="micro-tag">blackcurrant</span><span class="micro-tag">grapefruit</span><span class="micro-tag">tomato</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Antigua Pastores</strong><small>Stumptown</small></div>
+    <div class="cell-origin"><span class="origin-dot guatemala"></span>Guatemala</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:60%"></div></div><span class="score-num">7.67</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:85%"></div></div><span class="score-num">8.42</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:75%"></div></div><span class="score-num">8.08</span></div>
+    <div class="cell-tags"><span class="micro-tag">chocolate</span><span class="micro-tag">almond</span><span class="micro-tag">brown sugar</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Guji Hambela</strong><small>Sey Coffee</small></div>
+    <div class="cell-origin"><span class="origin-dot ethiopia"></span>Ethiopia</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:88%"></div></div><span class="score-num">8.67</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:50%"></div></div><span class="score-num">7.33</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:85%"></div></div><span class="score-num">8.33</span></div>
+    <div class="cell-tags"><span class="micro-tag">peach</span><span class="micro-tag">floral</span><span class="micro-tag">vanilla</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Tarrazú Honey</strong><small>George Howell</small></div>
+    <div class="cell-origin"><span class="origin-dot costa-rica"></span>Costa Rica</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:68%"></div></div><span class="score-num">7.83</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:75%"></div></div><span class="score-num">8.08</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:80%"></div></div><span class="score-num">8.17</span></div>
+    <div class="cell-tags"><span class="micro-tag">plum</span><span class="micro-tag">molasses</span><span class="micro-tag">orange peel</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Nariño Gesha</strong><small>Passenger Coffee</small></div>
+    <div class="cell-origin"><span class="origin-dot colombia"></span>Colombia</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:82%"></div></div><span class="score-num">8.33</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:58%"></div></div><span class="score-num">7.58</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:88%"></div></div><span class="score-num">8.42</span></div>
+    <div class="cell-tags"><span class="micro-tag">tropical fruit</span><span class="micro-tag">jasmine</span><span class="micro-tag">lime</span></div>
+  </div>
+
+  <div class="bean-row">
+    <div class="cell-name"><strong>Kiambu Peaberry</strong><small>Tim Wendelboe</small></div>
+    <div class="cell-origin"><span class="origin-dot kenya"></span>Kenya</div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill acidity" style="width:86%"></div></div><span class="score-num">8.58</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill body" style="width:70%"></div></div><span class="score-num">7.92</span></div>
+    <div class="cell-score"><div class="score-bar-wrap"><div class="score-bar-fill sweetness" style="width:72%"></div></div><span class="score-num">7.92</span></div>
+    <div class="cell-tags"><span class="micro-tag">cranberry</span><span class="micro-tag">sage</span><span class="micro-tag">toffee</span></div>
+  </div>
+</div>
+
+<div class="summary-bar">
+  <span>Showing 8 of 20 curated beans</span>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Acidity</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Body</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--rose)"></span>Sweetness</div>
+  </div>
+</div>
+
+</body>
+</html>

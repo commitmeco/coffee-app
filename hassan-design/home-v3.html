@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Field Guide — V3 Warm & Inviting</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1c1612;
+    --bg-warm: #231c16;
+    --bg-card: #2a2118;
+    --bg-card-hover: #332a1f;
+    --border: rgba(210,160,90,0.12);
+    --text: #ede4d8;
+    --text-soft: #bfb09c;
+    --text-faint: #7d7060;
+    --amber: #d2a05a;
+    --amber-glow: rgba(210,160,90,0.15);
+    --honey: #e8b960;
+    --copper: #c47a4a;
+    --cream: #f5e6cf;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-tag: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Warm ambient glow */
+  .ambient {
+    position: fixed;
+    top: -30%; left: 50%;
+    transform: translateX(-50%);
+    width: 120vw; height: 60vh;
+    background: radial-gradient(ellipse, rgba(210,160,90,0.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Nav */
+  nav {
+    position: relative; z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2.5rem;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--amber);
+  }
+  .nav-links {
+    display: flex; gap: 1.5rem;
+  }
+  .nav-links a {
+    color: var(--text-soft);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Welcome section */
+  .welcome {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 4rem 2rem 3rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .welcome-wave {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: popIn 0.5s 0.2s forwards;
+  }
+  .welcome h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 2.2rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: softUp 0.6s 0.3s forwards;
+  }
+  .welcome h1 span { color: var(--amber); }
+  .welcome p {
+    color: var(--text-soft);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    opacity: 0;
+    animation: softUp 0.6s 0.5s forwards;
+  }
+
+  /* Helpers */
+  .helper-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: softUp 0.6s 0.6s forwards;
+  }
+  .helper-pill {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-soft);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .helper-pill:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--amber);
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .helper-pill .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  /* Section header */
+  .section-head {
+    padding: 2rem 2.5rem 1.5rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+  .section-head span {
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+
+  /* Card grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+    padding: 0 2.5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bean-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+    opacity: 0;
+    animation: cardIn 0.5s forwards;
+  }
+  .bean-card:nth-child(1) { animation-delay: 0.7s; }
+  .bean-card:nth-child(2) { animation-delay: 0.8s; }
+  .bean-card:nth-child(3) { animation-delay: 0.9s; }
+  .bean-card:nth-child(4) { animation-delay: 1.0s; }
+  .bean-card:nth-child(5) { animation-delay: 1.1s; }
+  .bean-card:nth-child(6) { animation-delay: 1.2s; }
+  .bean-card:nth-child(7) { animation-delay: 1.3s; }
+  .bean-card:nth-child(8) { animation-delay: 1.4s; }
+
+  .bean-card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(210,160,90,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.25), 0 0 0 1px rgba(210,160,90,0.1);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .card-origin-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    background: var(--amber-glow);
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-tag);
+  }
+  .card-score-badge {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--honey);
+  }
+
+  .card-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+  }
+  .card-roaster {
+    color: var(--text-faint);
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Score bars */
+  .card-scores { margin-bottom: 1.25rem; }
+  .score-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+  .score-name {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    width: 70px;
+    flex-shrink: 0;
+  }
+  .score-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(210,160,90,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s cubic-bezier(0.22,1,0.36,1);
+  }
+  .score-fill.warm { background: linear-gradient(90deg, var(--copper), var(--amber)); }
+  .score-fill.honey { background: linear-gradient(90deg, var(--amber), var(--honey)); }
+  .score-explain {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    font-style: italic;
+    width: 110px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Tags */
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .flavor-tag {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius-tag);
+    background: rgba(232,185,96,0.07);
+    border: 1px solid rgba(232,185,96,0.15);
+    color: var(--text-soft);
+    transition: all 0.2s;
+  }
+  .flavor-tag:hover {
+    background: rgba(232,185,96,0.12);
+    color: var(--text);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-faint);
+    font-size: 0.85rem;
+    position: relative; z-index: 1;
+  }
+  footer strong {
+    color: var(--text-soft);
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes softUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<nav>
+  <div class="logo">Field Guide</div>
+  <div class="nav-links">
+    <a href="#">Beans</a>
+    <a href="#">Origins</a>
+    <a href="#">Flavors</a>
+  </div>
+</nav>
+
+<section class="welcome">
+  <div class="welcome-wave">&#9749;</div>
+  <h1>Discover what you <span>actually like</span> about coffee</h1>
+  <p>Not sure what "bright acidity" means? That's okay. We translate coffee scores into plain language so you can find beans you'll love.</p>
+</section>
+
+<div class="helper-row">
+  <div class="helper-pill"><span class="dot"></span>I liked something fruity</div>
+  <div class="helper-pill"><span class="dot"></span>I want something smooth</div>
+  <div class="helper-pill"><span class="dot"></span>Buying a gift</div>
+  <div class="helper-pill"><span class="dot"></span>What's from Ethiopia?</div>
+</div>
+
+<div class="section-head">
+  <h2>Our Collection</h2>
+  <span>20 curated beans</span>
+</div>
+
+<div class="card-grid">
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Ethiopia</span>
+      <span class="card-score-badge">92</span>
+    </div>
+    <h3 class="card-name">Yirgacheffe Natural</h3>
+    <p class="card-roaster">Onyx Coffee Lab</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:90%"></div></div>
+        <span class="score-explain">Bright, like lemon</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:55%"></div></div>
+        <span class="score-explain">Light and tea-like</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">blueberry</span>
+      <span class="flavor-tag">jasmine</span>
+      <span class="flavor-tag">bergamot</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Colombia</span>
+      <span class="card-score-badge">88</span>
+    </div>
+    <h3 class="card-name">Huila Supremo</h3>
+    <p class="card-roaster">Counter Culture</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:72%"></div></div>
+        <span class="score-explain">Gentle, apple-like</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:78%"></div></div>
+        <span class="score-explain">Rich and smooth</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">caramel</span>
+      <span class="flavor-tag">red apple</span>
+      <span class="flavor-tag">cocoa</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Kenya</span>
+      <span class="card-score-badge">91</span>
+    </div>
+    <h3 class="card-name">Nyeri AA</h3>
+    <p class="card-roaster">Heart Coffee</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:92%"></div></div>
+        <span class="score-explain">Zingy, grapefruit</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:65%"></div></div>
+        <span class="score-explain">Medium, juicy</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">blackcurrant</span>
+      <span class="flavor-tag">grapefruit</span>
+      <span class="flavor-tag">tomato</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Guatemala</span>
+      <span class="card-score-badge">87</span>
+    </div>
+    <h3 class="card-name">Antigua Pastores</h3>
+    <p class="card-roaster">Stumptown</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:60%"></div></div>
+        <span class="score-explain">Soft, mellow</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:85%"></div></div>
+        <span class="score-explain">Thick, velvety</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">chocolate</span>
+      <span class="flavor-tag">almond</span>
+      <span class="flavor-tag">brown sugar</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Ethiopia</span>
+      <span class="card-score-badge">90</span>
+    </div>
+    <h3 class="card-name">Guji Hambela</h3>
+    <p class="card-roaster">Sey Coffee</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:88%"></div></div>
+        <span class="score-explain">Sparkling, crisp</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:50%"></div></div>
+        <span class="score-explain">Delicate, silky</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">peach</span>
+      <span class="flavor-tag">floral</span>
+      <span class="flavor-tag">vanilla</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Costa Rica</span>
+      <span class="card-score-badge">89</span>
+    </div>
+    <h3 class="card-name">Tarrazú Honey</h3>
+    <p class="card-roaster">George Howell</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:68%"></div></div>
+        <span class="score-explain">Mild, rounded</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:75%"></div></div>
+        <span class="score-explain">Syrupy, full</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">plum</span>
+      <span class="flavor-tag">molasses</span>
+      <span class="flavor-tag">orange peel</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Colombia</span>
+      <span class="card-score-badge">93</span>
+    </div>
+    <h3 class="card-name">Nariño Gesha</h3>
+    <p class="card-roaster">Passenger Coffee</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:82%"></div></div>
+        <span class="score-explain">Lively, complex</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:58%"></div></div>
+        <span class="score-explain">Elegant, light</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">tropical fruit</span>
+      <span class="flavor-tag">jasmine</span>
+      <span class="flavor-tag">lime</span>
+    </div>
+  </div>
+
+  <div class="bean-card">
+    <div class="card-top">
+      <span class="card-origin-badge">Kenya</span>
+      <span class="card-score-badge">90</span>
+    </div>
+    <h3 class="card-name">Kiambu Peaberry</h3>
+    <p class="card-roaster">Tim Wendelboe</p>
+    <div class="card-scores">
+      <div class="score-item">
+        <span class="score-name">Acidity</span>
+        <div class="score-track"><div class="score-fill warm" style="width:86%"></div></div>
+        <span class="score-explain">Tart, berry-like</span>
+      </div>
+      <div class="score-item">
+        <span class="score-name">Body</span>
+        <div class="score-track"><div class="score-fill honey" style="width:70%"></div></div>
+        <span class="score-explain">Medium, clean</span>
+      </div>
+    </div>
+    <div class="card-tags">
+      <span class="flavor-tag">cranberry</span>
+      <span class="flavor-tag">sage</span>
+      <span class="flavor-tag">toffee</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>A <strong>Field Guide</strong> for curious coffee drinkers</p>
+</footer>
+
+</body>
+</html>

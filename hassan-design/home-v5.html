@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Field Guide — V5 Origin-First</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #111115;
+    --bg-section: #16161b;
+    --bg-card: #1c1c22;
+    --bg-card-hover: #222229;
+    --text: #e4e4ea;
+    --text-mid: #9898a4;
+    --text-dim: #5c5c68;
+    --border: rgba(140,140,170,0.1);
+
+    --ethiopia-accent: #e8a44a;
+    --ethiopia-glow: rgba(232,164,74,0.08);
+    --colombia-accent: #5ccf7a;
+    --colombia-glow: rgba(92,207,122,0.08);
+    --kenya-accent: #e85c6a;
+    --kenya-glow: rgba(232,92,106,0.08);
+    --guatemala-accent: #9c7cf0;
+    --guatemala-glow: rgba(156,124,240,0.08);
+    --costa-rica-accent: #4ab8e8;
+    --costa-rica-glow: rgba(74,184,232,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2.5rem;
+    background: rgba(17,17,21,0.9);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-brand {
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .nav-brand span { color: var(--ethiopia-accent); }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a {
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* Page header */
+  .page-header {
+    padding: 4rem 2.5rem 2rem;
+    max-width: 650px;
+  }
+  .page-header h1 {
+    font-family: 'Lora', serif;
+    font-size: 2.6rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: rise 0.6s 0.1s forwards;
+  }
+  .page-header p {
+    color: var(--text-mid);
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity: 0;
+    animation: rise 0.6s 0.3s forwards;
+  }
+
+  /* Origin jump links */
+  .origin-jumps {
+    padding: 0 2.5rem 2rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: rise 0.6s 0.4s forwards;
+  }
+  .jump-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-mid);
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .jump-link:hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.15);
+    color: var(--text);
+  }
+  .jump-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Origin section */
+  .origin-section {
+    padding: 3rem 2.5rem;
+    position: relative;
+    opacity: 0;
+    animation: rise 0.5s forwards;
+  }
+  .origin-section:nth-of-type(1) { animation-delay: 0.5s; }
+  .origin-section:nth-of-type(2) { animation-delay: 0.6s; }
+  .origin-section:nth-of-type(3) { animation-delay: 0.7s; }
+  .origin-section:nth-of-type(4) { animation-delay: 0.8s; }
+  .origin-section:nth-of-type(5) { animation-delay: 0.9s; }
+
+  .origin-section::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+  }
+
+  .origin-section.ethiopia::before { background: var(--ethiopia-accent); }
+  .origin-section.colombia::before { background: var(--colombia-accent); }
+  .origin-section.kenya::before { background: var(--kenya-accent); }
+  .origin-section.guatemala::before { background: var(--guatemala-accent); }
+  .origin-section.costa-rica::before { background: var(--costa-rica-accent); }
+
+  .origin-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .origin-name {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  .origin-count {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 500;
+  }
+  .origin-desc {
+    color: var(--text-mid);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    font-family: 'Lora', serif;
+  }
+
+  /* Horizontal scroll row */
+  .bean-scroll {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+  }
+  .bean-scroll::-webkit-scrollbar { height: 4px; }
+  .bean-scroll::-webkit-scrollbar-track { background: transparent; }
+  .bean-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .scroll-card {
+    min-width: 320px;
+    max-width: 320px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .scroll-card:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  }
+
+  .sc-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .sc-name {
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .sc-score {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .sc-roaster {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Scores */
+  .sc-scores { margin-bottom: 1rem; }
+  .sc-score-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .sc-s-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    width: 65px;
+    flex-shrink: 0;
+  }
+  .sc-bar {
+    flex: 1;
+    height: 5px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .sc-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+  }
+  .sc-explain {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-style: italic;
+    flex-shrink: 0;
+    width: 90px;
+    text-align: right;
+  }
+
+  .sc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .sc-tag {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid;
+    font-weight: 500;
+  }
+
+  /* Color per origin */
+  .ethiopia .sc-score { color: var(--ethiopia-accent); }
+  .ethiopia .sc-bar-fill { background: var(--ethiopia-accent); }
+  .ethiopia .sc-tag { border-color: rgba(232,164,74,0.25); color: var(--ethiopia-accent); background: var(--ethiopia-glow); }
+  .ethiopia .scroll-card:hover { border-color: rgba(232,164,74,0.25); }
+
+  .colombia .sc-score { color: var(--colombia-accent); }
+  .colombia .sc-bar-fill { background: var(--colombia-accent); }
+  .colombia .sc-tag { border-color: rgba(92,207,122,0.25); color: var(--colombia-accent); background: var(--colombia-glow); }
+  .colombia .scroll-card:hover { border-color: rgba(92,207,122,0.25); }
+
+  .kenya .sc-score { color: var(--kenya-accent); }
+  .kenya .sc-bar-fill { background: var(--kenya-accent); }
+  .kenya .sc-tag { border-color: rgba(232,92,106,0.25); color: var(--kenya-accent); background: var(--kenya-glow); }
+  .kenya .scroll-card:hover { border-color: rgba(232,92,106,0.25); }
+
+  .guatemala .sc-score { color: var(--guatemala-accent); }
+  .guatemala .sc-bar-fill { background: var(--guatemala-accent); }
+  .guatemala .sc-tag { border-color: rgba(156,124,240,0.25); color: var(--guatemala-accent); background: var(--guatemala-glow); }
+  .guatemala .scroll-card:hover { border-color: rgba(156,124,240,0.25); }
+
+  .costa-rica .sc-score { color: var(--costa-rica-accent); }
+  .costa-rica .sc-bar-fill { background: var(--costa-rica-accent); }
+  .costa-rica .sc-tag { border-color: rgba(74,184,232,0.25); color: var(--costa-rica-accent); background: var(--costa-rica-glow); }
+  .costa-rica .scroll-card:hover { border-color: rgba(74,184,232,0.25); }
+
+  /* Dividers between sections */
+  .origin-section + .origin-section {
+    border-top: 1px solid var(--border);
+  }
+
+  /* Footer */
+  footer {
+    padding: 3rem 2.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+  footer .brand-foot {
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    color: var(--text-mid);
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .page-header h1 { font-size: 1.8rem; }
+    .origin-section { padding: 2rem 1.5rem; }
+    .scroll-card { min-width: 280px; max-width: 280px; }
+    nav, .page-header, .origin-jumps, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">field<span>.</span>guide</div>
+  <div class="nav-links">
+    <a href="#">Beans</a>
+    <a href="#">Origins</a>
+    <a href="#">Flavors</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Explore coffee by where it grows</h1>
+  <p>Every origin tells a different story. Browse beans grouped by country, each with its own character. Scroll to discover what makes each region distinctive.</p>
+</div>
+
+<div class="origin-jumps">
+  <a class="jump-link"><span class="jump-dot" style="background:var(--ethiopia-accent)"></span>Ethiopia</a>
+  <a class="jump-link"><span class="jump-dot" style="background:var(--colombia-accent)"></span>Colombia</a>
+  <a class="jump-link"><span class="jump-dot" style="background:var(--kenya-accent)"></span>Kenya</a>
+  <a class="jump-link"><span class="jump-dot" style="background:var(--guatemala-accent)"></span>Guatemala</a>
+  <a class="jump-link"><span class="jump-dot" style="background:var(--costa-rica-accent)"></span>Costa Rica</a>
+</div>
+
+<!-- ETHIOPIA -->
+<section class="origin-section ethiopia">
+  <div class="origin-header">
+    <h2 class="origin-name">Ethiopia</h2>
+    <span class="origin-count">4 beans</span>
+  </div>
+  <p class="origin-desc">The birthplace of coffee. Ethiopian beans are known for their explosive fruitiness and floral complexity — often described as "wine-like" or "tea-like" depending on the processing method.</p>
+  <div class="bean-scroll">
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Yirgacheffe Natural</span>
+        <span class="sc-score">92</span>
+      </div>
+      <p class="sc-roaster">Onyx Coffee Lab</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:90%"></div></div>
+          <span class="sc-explain">Bright, zesty</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:55%"></div></div>
+          <span class="sc-explain">Light, tea-like</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">blueberry</span>
+        <span class="sc-tag">jasmine</span>
+        <span class="sc-tag">bergamot</span>
+      </div>
+    </div>
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Guji Hambela</span>
+        <span class="sc-score">90</span>
+      </div>
+      <p class="sc-roaster">Sey Coffee</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:88%"></div></div>
+          <span class="sc-explain">Sparkling</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:50%"></div></div>
+          <span class="sc-explain">Delicate, silky</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">peach</span>
+        <span class="sc-tag">floral</span>
+        <span class="sc-tag">vanilla</span>
+      </div>
+    </div>
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Sidamo Washed</span>
+        <span class="sc-score">89</span>
+      </div>
+      <p class="sc-roaster">Intelligentsia</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:78%"></div></div>
+          <span class="sc-explain">Citrusy, clean</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:60%"></div></div>
+          <span class="sc-explain">Medium, smooth</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">lemon</span>
+        <span class="sc-tag">lavender</span>
+        <span class="sc-tag">honey</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLOMBIA -->
+<section class="origin-section colombia">
+  <div class="origin-header">
+    <h2 class="origin-name">Colombia</h2>
+    <span class="origin-count">3 beans</span>
+  </div>
+  <p class="origin-desc">Colombia produces balanced, approachable coffees with caramel sweetness and bright fruit notes. The varied microclimates create surprising range even within a single region.</p>
+  <div class="bean-scroll">
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Huila Supremo</span>
+        <span class="sc-score">88</span>
+      </div>
+      <p class="sc-roaster">Counter Culture</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:72%"></div></div>
+          <span class="sc-explain">Gentle, apple</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:78%"></div></div>
+          <span class="sc-explain">Rich, smooth</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">caramel</span>
+        <span class="sc-tag">red apple</span>
+        <span class="sc-tag">cocoa</span>
+      </div>
+    </div>
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Nariño Gesha</span>
+        <span class="sc-score">93</span>
+      </div>
+      <p class="sc-roaster">Passenger Coffee</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:82%"></div></div>
+          <span class="sc-explain">Lively, complex</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:58%"></div></div>
+          <span class="sc-explain">Elegant, light</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">tropical fruit</span>
+        <span class="sc-tag">jasmine</span>
+        <span class="sc-tag">lime</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KENYA -->
+<section class="origin-section kenya">
+  <div class="origin-header">
+    <h2 class="origin-name">Kenya</h2>
+    <span class="origin-count">2 beans</span>
+  </div>
+  <p class="origin-desc">Kenyan coffees hit hard — intense acidity, deep berry and citrus flavors, and a complexity that rewards attention. The AA grade refers to bean size, the largest and most sought-after.</p>
+  <div class="bean-scroll">
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Nyeri AA</span>
+        <span class="sc-score">91</span>
+      </div>
+      <p class="sc-roaster">Heart Coffee</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:92%"></div></div>
+          <span class="sc-explain">Explosive, citrus</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:65%"></div></div>
+          <span class="sc-explain">Medium, juicy</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">blackcurrant</span>
+        <span class="sc-tag">grapefruit</span>
+        <span class="sc-tag">tomato</span>
+      </div>
+    </div>
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Kiambu Peaberry</span>
+        <span class="sc-score">90</span>
+      </div>
+      <p class="sc-roaster">Tim Wendelboe</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:86%"></div></div>
+          <span class="sc-explain">Tart, berry</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:70%"></div></div>
+          <span class="sc-explain">Medium, clean</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">cranberry</span>
+        <span class="sc-tag">sage</span>
+        <span class="sc-tag">toffee</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUATEMALA -->
+<section class="origin-section guatemala">
+  <div class="origin-header">
+    <h2 class="origin-name">Guatemala</h2>
+    <span class="origin-count">2 beans</span>
+  </div>
+  <p class="origin-desc">Volcanic soil and high altitude give Guatemalan coffees their signature heavy body and chocolate-forward flavors. Antigua is the most famous region — rich, comforting, and deeply sweet.</p>
+  <div class="bean-scroll">
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Antigua Pastores</span>
+        <span class="sc-score">87</span>
+      </div>
+      <p class="sc-roaster">Stumptown</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:60%"></div></div>
+          <span class="sc-explain">Soft, mellow</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:85%"></div></div>
+          <span class="sc-explain">Thick, velvety</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">chocolate</span>
+        <span class="sc-tag">almond</span>
+        <span class="sc-tag">brown sugar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COSTA RICA -->
+<section class="origin-section costa-rica">
+  <div class="origin-header">
+    <h2 class="origin-name">Costa Rica</h2>
+    <span class="origin-count">1 bean</span>
+  </div>
+  <p class="origin-desc">Costa Rican honey-processed coffees are prized for their sweetness and syrupy body. The honey process leaves some fruit on the bean during drying, creating rich, complex flavors.</p>
+  <div class="bean-scroll">
+    <div class="scroll-card">
+      <div class="sc-top">
+        <span class="sc-name">Tarrazú Honey</span>
+        <span class="sc-score">89</span>
+      </div>
+      <p class="sc-roaster">George Howell</p>
+      <div class="sc-scores">
+        <div class="sc-score-row">
+          <span class="sc-s-label">Acidity</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:68%"></div></div>
+          <span class="sc-explain">Mild, rounded</span>
+        </div>
+        <div class="sc-score-row">
+          <span class="sc-s-label">Body</span>
+          <div class="sc-bar"><div class="sc-bar-fill" style="width:75%"></div></div>
+          <span class="sc-explain">Syrupy, full</span>
+        </div>
+      </div>
+      <div class="sc-tags">
+        <span class="sc-tag">plum</span>
+        <span class="sc-tag">molasses</span>
+        <span class="sc-tag">orange peel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="brand-foot">field.guide</span>
+  <span>20 curated beans across 5 origins</span>
+</footer>
+
+</body>
+</html>
