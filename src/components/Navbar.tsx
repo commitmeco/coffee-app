@@ -46,6 +46,9 @@ export default function Navbar() {
           <Link href="/shops" className="hover:text-caramel-light transition-colors">
             Shops
           </Link>
+          <Link href="/brew-guide" className="hover:text-caramel-light transition-colors">
+            Brew Guide
+          </Link>
           <Link href="/quiz" className="hover:text-caramel-light transition-colors flex items-center gap-1">
             <span className="text-xs">✨</span>
             Quiz
@@ -169,6 +172,9 @@ export default function Navbar() {
           </Link>
           <Link href="/shops" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
             Coffee Shops
+          </Link>
+          <Link href="/brew-guide" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
+            Brew Guide
           </Link>
           <Link href="/quiz" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
             <span className="text-xs">✨</span>
