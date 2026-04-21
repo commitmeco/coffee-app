@@ -2,203 +2,110 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useDiary } from "@/components/DiaryProvider";
 import { useCart } from "@/components/CartProvider";
 import CartDrawer from "@/components/CartDrawer";
 
-export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [cartOpen, setCartOpen] = useState(false);
-  const router = useRouter();
-  const { entries, hydrated } = useDiary();
-  const diaryCount = hydrated ? Object.keys(entries).length : 0;
-  const { cartCount, hydrated: cartHydrated } = useCart();
+const TICKER_ITEMS = [
+  "☕ NEW ISSUE: 3 Days in Yirgacheffe, Ethiopia",
+  "🌍 Exclusive: Inside Panama's Gesha Valley with Don Pachi",
+  "🏆 World Barista Championship Preview — Tokyo 2025",
+  "🫘 New Bean Drop: Rwanda Bourbon Peaberry — Limited Edition",
+  "📍 Just Published: The 12 Best Specialty Cafés in Oaxaca",
+];
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-      setSearchOpen(false);
-      setMenuOpen(false);
-    }
-  }
+export default function Navbar() {
+  const [cartOpen, setCartOpen] = useState(false);
+  const { cartCount, hydrated } = useCart();
+  const tickerContent = [...TICKER_ITEMS, ...TICKER_ITEMS]; // doubled for seamless loop
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/95 text-[#E8E4E0] shadow-[0_1px_0_rgba(255,255,255,0.04)]">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <>
+      {/* News Ticker */}
+      <div
+        className="overflow-hidden whitespace-nowrap text-white text-[0.72rem] font-semibold tracking-[0.12em] uppercase py-2"
+        style={{ background: "#FF5C1A" }}
+        aria-label="Breaking news ticker"
+      >
+        <div className="omc-ticker-inner inline-flex gap-0">
+          {tickerContent.map((item, i) => (
+            <span key={i} className="px-8 inline-flex items-center gap-4">
+              {item}
+              <span className="text-white/50">◆</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Masthead */}
+      <header
+        className="sticky top-0 z-[200] flex items-center justify-between px-12 h-20"
+        style={{ background: "#0A0804", borderBottom: "3px solid #FF5C1A" }}
+      >
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <span className="text-2xl">☕</span>
-          <span className="font-serif text-xl font-bold tracking-tight group-hover:text-caramel-light transition-colors">
-            Coffee App
-          </span>
+        <Link href="/" className="leading-none cursor-pointer group">
+          <div
+            className="text-[2.2rem] tracking-[0.06em] text-white leading-none"
+            style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+          >
+            One <span style={{ color: "#FF5C1A" }}>More</span> Cup
+          </div>
+          <div className="text-[0.55rem] tracking-[0.25em] uppercase font-medium mt-0.5" style={{ color: "#C4843A" }}>
+            The World's Coffee Lifestyle Magazine
+          </div>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/" className="hover:text-caramel-light transition-colors">
-            Beans
-          </Link>
-          <Link href="/shops" className="hover:text-caramel-light transition-colors">
-            Shops
-          </Link>
-          <Link href="/brew-guide" className="hover:text-caramel-light transition-colors">
-            Brew Guide
-          </Link>
-          <Link href="/quiz" className="hover:text-caramel-light transition-colors flex items-center gap-1">
-            <span className="text-xs">✨</span>
-            Quiz
-          </Link>
-          <Link href="/diary" className="hover:text-caramel-light transition-colors flex items-center gap-1.5">
-            Diary
-            {diaryCount > 0 && (
-              <span className="bg-caramel text-[#0F0F0F] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in">
-                {diaryCount}
-              </span>
-            )}
-          </Link>
-          <Link href="/social" className="hover:text-caramel-light transition-colors">
-            Social
-          </Link>
+        {/* Nav Links */}
+        <nav className="hidden md:flex items-center gap-8">
+          {[
+            { href: "#destinations", label: "Destinations" },
+            { href: "#training",     label: "Training" },
+            { href: "#shop",         label: "Shop" },
+            { href: "#passport",     label: "Passport" },
+          ].map(({ href, label }) => (
+            <a
+              key={href}
+              href={href}
+              className="text-[0.78rem] font-medium tracking-[0.08em] uppercase transition-colors"
+              style={{ color: "rgba(250,250,245,0.65)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#FF5C1A")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(250,250,245,0.65)")}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
 
-          {/* Desktop search toggle */}
-          <div className="relative">
-            {searchOpen ? (
-              <form onSubmit={handleSearch} className="flex items-center animate-fade-in">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search beans..."
-                  autoFocus
-                  className="w-48 bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-1.5 text-sm text-[#E8E4E0] placeholder:text-white/40 focus:outline-none focus:border-caramel/50"
-                />
-                <button
-                  type="button"
-                  onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                  className="ml-2 text-white/60 hover:text-white"
-                  aria-label="Close search"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-1.5 rounded-full hover:bg-white/[0.06] transition-colors"
-                aria-label="Open search"
+        {/* Actions */}
+        <div className="flex items-center gap-3">
+          <button
+            className="hidden md:inline-flex text-[0.75rem] font-semibold tracking-[0.05em] uppercase px-4 py-2 rounded-full border-0 text-white cursor-pointer transition-all"
+            style={{ background: "#FF5C1A" }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "#FFD700"; e.currentTarget.style.color = "#0A0804"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "#FF5C1A"; e.currentTarget.style.color = "white"; }}
+          >
+            ✈️ My Passport
+          </button>
+
+          <button
+            onClick={() => setCartOpen(true)}
+            className="relative w-[38px] h-[38px] rounded-full flex items-center justify-center text-base text-white cursor-pointer transition-all"
+            style={{ border: "1px solid rgba(250,250,245,0.2)", background: "none" }}
+            aria-label="Open cart"
+          >
+            🛒
+            {hydrated && cartCount > 0 && (
+              <span
+                className="absolute -top-[3px] -right-[3px] w-[18px] h-[18px] rounded-full flex items-center justify-center text-[0.62rem] font-bold text-[#0A0804]"
+                style={{ background: "#FF5C1A" }}
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            )}
-          </div>
-
-          {/* Cart icon */}
-          <button
-            onClick={() => setCartOpen(true)}
-            className="relative p-1.5 rounded-full hover:bg-white/[0.06] transition-colors"
-            aria-label="Open cart"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-            </svg>
-            {cartHydrated && cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-caramel text-[#0F0F0F] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in">
                 {cartCount > 9 ? "9+" : cartCount}
               </span>
             )}
           </button>
         </div>
+      </header>
 
-        {/* Mobile: cart + hamburger */}
-        <div className="flex items-center gap-2 md:hidden">
-          <button
-            onClick={() => setCartOpen(true)}
-            className="relative p-2 rounded-lg hover:bg-white/[0.06] transition-colors"
-            aria-label="Open cart"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100-4 2 2 0 000-4z" />
-            </svg>
-            {cartHydrated && cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-caramel text-[#0F0F0F] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in">
-                {cartCount > 9 ? "9+" : cartCount}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 rounded-lg hover:bg-white/[0.06] transition-colors"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-          >
-            <div className="w-5 h-4 relative flex flex-col justify-between">
-              <span className={`block h-0.5 w-full bg-[#E8E4E0] rounded-full transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
-              <span className={`block h-0.5 w-full bg-[#E8E4E0] rounded-full transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`block h-0.5 w-full bg-[#E8E4E0] rounded-full transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
-            </div>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          menuOpen ? "max-h-96 border-t border-white/[0.06]" : "max-h-0"
-        }`}
-      >
-        <div className="px-4 py-4 space-y-1">
-          {/* Mobile search */}
-          <form onSubmit={handleSearch} className="mb-3">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search beans..."
-              className="w-full bg-white/[0.06] border border-white/[0.08] rounded-full px-4 py-2.5 text-sm text-[#E8E4E0] placeholder:text-white/40 focus:outline-none focus:border-caramel/50"
-            />
-          </form>
-
-          <Link href="/" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            Browse Beans
-          </Link>
-          <Link href="/shops" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            Coffee Shops
-          </Link>
-          <Link href="/brew-guide" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            Brew Guide
-          </Link>
-          <Link href="/quiz" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            <span className="text-xs">✨</span>
-            Flavor Quiz
-          </Link>
-          <Link href="/diary" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            My Diary
-            {diaryCount > 0 && (
-              <span className="bg-caramel text-[#0F0F0F] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                {diaryCount}
-              </span>
-            )}
-          </Link>
-          <Link href="/social" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            Community
-          </Link>
-          <Link href="/profile" onClick={() => setMenuOpen(false)} className="block py-3 px-3 rounded-lg text-[#E8E4E0] hover:bg-white/[0.06] transition-colors">
-            Profile
-          </Link>
-        </div>
-      </div>
-
-      {/* Cart Drawer */}
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
-    </nav>
+    </>
   );
 }
