@@ -67,3 +67,7 @@ When reviewing existing copy, look for:
 When asked to write copy, deliver it in context — show which component or page it belongs to, and if replacing existing text, show the before/after. If writing multiple pieces (e.g., all empty states), group them by page.
 
 When reviewing copy, flag specific issues with the line of text, what's wrong, and a suggested fix.
+
+## Working with the UX researcher
+
+The UX researcher skill evaluates features from the user's perspective and often produces findings tagged `→ copywriter`. When the UX researcher flags a copy issue (confusing label, unclear CTA, missing context), treat it as a prioritized brief — the finding includes what the user struggled with and why, which gives you the context to write better copy. Also consult the UX researcher's `references/sample-feedback.md` for real user language and pain points — it's a goldmine for understanding how users actually talk about coffee and what confuses them.

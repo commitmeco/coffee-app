@@ -98,4 +98,8 @@ Always run `npm run build` as part of a review — it catches server/client boun
 
 ## Cross-skill coordination
 
-If you find design issues, note that the **designer skill** should be consulted for the fix. If you find copy issues, note that the **copywriter skill** should handle the rewrite. Your job is to find and flag — you don't need to be the one who fixes everything, but you should always suggest *who* (which skill) should own the fix.
+If you find design issues, note that the **designer skill** should be consulted for the fix. If you find copy issues, note that the **copywriter skill** should handle the rewrite. If you find usability or flow issues, note that the **ux-researcher skill** should evaluate them — the UX researcher can determine whether a confusing interaction is a design problem, a copy problem, or a flow problem, and route it accordingly.
+
+Your job is to find and flag — you don't need to be the one who fixes everything, but you should always suggest *who* (which skill) should own the fix.
+
+When reviewing a new feature, check whether the **UX researcher** did a pre-build flow review. If findings exist, treat them as additional acceptance criteria — verify that flagged issues were addressed in the implementation.

@@ -79,6 +79,7 @@ When asked to build or modify a component:
 3. **Think in Tailwind.** All styling should be Tailwind utility classes — no separate CSS files per component. If a utility pattern repeats, consider whether it should be a component, not a custom CSS class.
 4. **Show your reasoning.** When making a visual choice (e.g., "I used `sage` for this badge because scores above 85 use sage"), explain why so the team can learn and maintain consistency.
 5. **Consider the copywriter.** If the component has text, flag it for the copywriter skill — design and copy should be developed together.
+6. **Check with the UX researcher.** Before finalizing a new flow or interaction pattern, consider whether the UX researcher skill should evaluate it. The UX researcher checks whether the flow makes sense to actual users (not just whether it looks good), and can flag issues like dead ends, missing feedback states, or confusing navigation that pure visual review won't catch. For new features, run a UX flow review before building.
 
 ## Output format
 
