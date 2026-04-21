@@ -4,6 +4,7 @@ import { DiaryProvider } from "@/components/DiaryProvider";
 import { CartProvider } from "@/components/CartProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BaristaChat from "@/components/BaristaChat";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,6 +38,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
+            <BaristaChat />
           </CartProvider>
         </DiaryProvider>
       </body>
