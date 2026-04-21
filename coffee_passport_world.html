@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Passport</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5ECD7;
+    --espresso: #2C1810;
+    --roast: #6B3A2A;
+    --caramel: #C4843A;
+    --gold: #D4A843;
+    --sage: #7A8C6E;
+    --foam: #FAF5EC;
+    --ink: #1A0F0A;
+    --muted: #8B7355;
+    --border: rgba(107,58,42,0.2);
+    --card: #FFFDF8;
+    --stamp-green: #4A7C59;
+    --stamp-red: #8B2E2E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--foam);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--espresso);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 60px;
+    border-bottom: 3px solid var(--caramel);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    color: var(--cream);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-tabs {
+    display: flex;
+    height: 100%;
+  }
+
+  .nav-tab {
+    padding: 0 1rem;
+    color: rgba(245,236,215,0.6);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    background: none;
+    height: 100%;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    top: 3px;
+  }
+
+  .nav-tab:hover { color: var(--cream); }
+  .nav-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .cart-btn {
+    background: var(--caramel);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+  }
+
+  .cart-btn:hover { background: var(--roast); }
+
+  .cart-badge {
+    background: var(--gold);
+    color: var(--espresso);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  /* MAIN */
+  main { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--espresso);
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header p {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  /* BEAN CARDS GRID */
+  .beans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .bean-card {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .bean-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(44,24,16,0.12);
+  }
+
+  .bean-card-img {
+    height: 160px;
+    background: linear-gradient(135deg, var(--caramel), var(--roast));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bean-country-flag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+  }
+
+  .tried-stamp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--stamp-green);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    transform: rotate(3deg);
+  }
+
+  .fav-stamp {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.3));
+    transition: transform 0.2s;
+  }
+
+  .fav-stamp:hover { transform: scale(1.2); }
+
+  .bean-card-body { padding: 1.25rem; }
+
+  .bean-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--espresso);
+    margin-bottom: 2px;
+  }
+
+  .bean-origin {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .bean-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag {
+    background: rgba(196,132,58,0.12);
+    color: var(--roast);
+    font-size: 0.68rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .bean-flavor-bar {
+    margin-bottom: 0.5rem;
+  }
+
+  .flavor-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .flavor-track {
+    height: 4px;
+    background: rgba(107,58,42,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .flavor-fill {
+    height: 100%;
+    background: var(--caramel);
+    border-radius: 2px;
+  }
+
+  /* SUSTAINABILITY */
+  .sustainability {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0.75rem 0;
+    padding: 6px 10px;
+    background: rgba(122,140,110,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(122,140,110,0.2);
+  }
+
+  .sustain-label {
+    font-size: 0.7rem;
+    color: var(--sage);
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .sustain-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .sustain-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(122,140,110,0.25);
+  }
+
+  .sustain-dot.filled { background: var(--sage); }
+
+  /* RATING STARS */
+  .stars-row {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 0.75rem;
+  }
+
+  .star {
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  /* BEAN PRICE */
+  .bean-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .bean-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--roast);
+  }
+
+  .bean-price span {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .add-cart-btn {
+    background: var(--espresso);
+    color: var(--cream);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .add-cart-btn:hover { background: var(--roast); }
+
+  .tried-btn {
+    background: transparent;
+    color: var(--sage);
+    border: 1px solid var(--sage);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .tried-btn.active {
+    background: var(--sage);
+    color: white;
+  }
+
+  /* PASSPORT PAGE */
+  .passport-header {
+    background: var(--espresso);
+    border-radius: 16px;
+    padding: 2rem;
+    color: var(--cream);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .passport-header::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 150px; height: 150px;
+    border: 2px solid rgba(212,168,67,0.2);
+    border-radius: 50%;
+  }
+
+  .passport-book {
+    width: 80px;
+    height: 100px;
+    background: var(--roast);
+    border-radius: 6px;
+    border-left: 6px solid var(--caramel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.3);
+  }
+
+  .passport-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    color: var(--gold);
+  }
+
+  .passport-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--caramel);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* STAMPS GRID */
+  .stamps-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--espresso);
+    margin-bottom: 1rem;
+  }
+
+  .stamps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .stamp {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    border: 2px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stamp.earned {
+    border: 2px solid var(--stamp-green);
+    background: rgba(74,124,89,0.06);
+  }
+
+  .stamp.earned::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(74,124,89,0.04) 8px,
+      rgba(74,124,89,0.04) 9px
+    );
+  }
+
+  .stamp-icon { font-size: 2rem; position: relative; }
+  .stamp-name { font-size: 0.72rem; color: var(--muted); position: relative; font-weight: 500; }
+  .stamp-country { font-size: 0.65rem; color: var(--sage); position: relative; }
+
+  .stamp-check {
+    position: absolute;
+    top: 6px; right: 6px;
+    font-size: 0.8rem;
+  }
+
+  /* LEADERBOARD */
+  .leaderboard-table {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .lb-header {
+    background: var(--espresso);
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 80px 100px;
+    gap: 1rem;
+    color: rgba(245,236,215,0.6);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .lb-row {
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 80px 100px;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .lb-row:hover { background: rgba(196,132,58,0.04); }
+  .lb-row:last-child { border-bottom: none; }
+
+  .lb-rank {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .lb-rank.top { color: var(--gold); font-size: 1.3rem; }
+
+  .lb-bean-info { display: flex; align-items: center; gap: 10px; }
+  .lb-bean-icon { font-size: 1.5rem; }
+  .lb-bean-name { font-weight: 500; color: var(--espresso); font-size: 0.9rem; }
+  .lb-bean-origin { font-size: 0.72rem; color: var(--muted); }
+
+  .lb-rating {
+    display: flex;
+    gap: 1px;
+    font-size: 0.8rem;
+  }
+
+  .lb-price { font-weight: 500; color: var(--roast); font-size: 0.9rem; }
+
+  .lb-sustain {
+    display: flex;
+    gap: 2px;
+  }
+
+  /* SEARCH PAGE */
+  .search-panel {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .filters-card {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: sticky;
+    top: 80px;
+  }
+
+  .filters-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--espresso);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-group { margin-bottom: 1.25rem; }
+
+  .filter-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .filter-select, .filter-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--foam);
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    appearance: none;
+  }
+
+  .range-slider {
+    width: 100%;
+    accent-color: var(--caramel);
+  }
+
+  .range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .checkbox-pill {
+    padding: 5px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .checkbox-pill.active {
+    background: var(--espresso);
+    color: var(--cream);
+    border-color: var(--espresso);
+  }
+
+  .search-btn {
+    width: 100%;
+    background: var(--caramel);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .search-btn:hover { background: var(--roast); }
+
+  /* RECOMMENDATIONS */
+  .rec-section {
+    margin-bottom: 2rem;
+  }
+
+  .rec-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--espresso);
+    margin-bottom: 0.25rem;
+  }
+
+  .rec-section p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .rec-scroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .rec-card {
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: transform 0.2s;
+    cursor: pointer;
+  }
+
+  .rec-card:hover { transform: translateY(-2px); }
+
+  .rec-icon { font-size: 2rem; flex-shrink: 0; }
+
+  .rec-name {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--espresso);
+    margin-bottom: 2px;
+  }
+
+  .rec-reason {
+    font-size: 0.72rem;
+    color: var(--sage);
+    font-style: italic;
+  }
+
+  /* CART PAGE */
+  .cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .cart-items {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .cart-item {
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cart-item:last-child { border-bottom: none; }
+
+  .cart-item-icon { font-size: 2.5rem; flex-shrink: 0; }
+
+  .cart-item-info { flex: 1; }
+
+  .cart-item-name {
+    font-weight: 500;
+    color: var(--espresso);
+    margin-bottom: 2px;
+  }
+
+  .cart-item-origin {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .qty-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .qty-btn:hover { background: var(--border); }
+  .qty-num { font-weight: 500; min-width: 20px; text-align: center; }
+
+  .cart-item-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--roast);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1rem;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+
+  .remove-btn:hover { color: #8B2E2E; }
+
+  /* ORDER SUMMARY */
+  .order-summary {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: sticky;
+    top: 80px;
+  }
+
+  .order-summary h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--espresso);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .summary-row.total {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--espresso);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+
+  .gift-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(212,168,67,0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(212,168,67,0.2);
+    cursor: pointer;
+    margin: 1rem 0;
+    transition: background 0.15s;
+  }
+
+  .gift-toggle:hover { background: rgba(212,168,67,0.15); }
+
+  .gift-toggle input[type="checkbox"] {
+    accent-color: var(--gold);
+  }
+
+  .gift-fields {
+    display: none;
+  }
+
+  .gift-fields.open { display: block; }
+
+  .gift-field {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--foam);
+    color: var(--ink);
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 8px;
+  }
+
+  textarea.gift-field {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    background: var(--espresso);
+    color: var(--cream);
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .checkout-btn:hover { background: var(--roast); }
+
+  /* CHECKOUT MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,15,10,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 480px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--espresso);
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-field-group { margin-bottom: 1rem; }
+
+  .modal-label {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .modal-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--foam);
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .modal-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+  }
+
+  .modal-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .modal-confirm {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--caramel);
+    color: white;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+
+  .modal-confirm:hover { background: var(--roast); }
+
+  /* SUCCESS */
+  .success-screen {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--stamp-green);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-screen p { color: var(--muted); font-size: 0.85rem; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--muted);
+  }
+
+  .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+  .empty-state h3 { font-family: 'Playfair Display', serif; color: var(--espresso); margin-bottom: 0.5rem; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    z-index: 300;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* PROFILE TASTE */
+  .taste-profile {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .taste-profile h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--espresso);
+    margin-bottom: 1rem;
+  }
+
+  .taste-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .taste-item { text-align: center; }
+
+  .taste-circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 8px;
+    border: 3px solid var(--caramel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--caramel);
+    font-family: 'Playfair Display', serif;
+    background: rgba(196,132,58,0.06);
+  }
+
+  .taste-name { font-size: 0.72rem; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1rem; }
+    .nav-tab { padding: 0 0.6rem; font-size: 0.7rem; }
+    main { padding: 1rem; }
+    .passport-stats { grid-template-columns: repeat(2, 1fr); }
+    .search-panel, .cart-layout { grid-template-columns: 1fr; }
+    .filters-card { position: static; }
+    .order-summary { position: static; }
+    .taste-grid { grid-template-columns: repeat(2, 1fr); }
+    .lb-header, .lb-row { grid-template-columns: 30px 1fr 60px 70px; }
+    .lb-header > :last-child, .lb-row > :last-child { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">☕ <span>Bean</span>Passport</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('explore')">Explore</button>
+    <button class="nav-tab" onclick="showPage('passport')">My Passport</button>
+    <button class="nav-tab" onclick="showPage('discover')">Discover</button>
+    <button class="nav-tab" onclick="showPage('search')">Search</button>
+    <button class="nav-tab" onclick="showPage('leaderboard')">Rankings</button>
+  </div>
+  <button class="cart-btn" onclick="showPage('cart')">
+    🛒 Cart <span class="cart-badge" id="cart-count">0</span>
+  </button>
+</nav>
+
+<main>
+
+<!-- EXPLORE PAGE -->
+<div class="page active" id="page-explore">
+  <div class="page-header">
+    <h1>World Coffee Explorer</h1>
+    <p>Discover extraordinary beans from across the globe. Mark what you've tried, collect stamps, build your favorites.</p>
+  </div>
+  <div class="beans-grid" id="explore-grid"></div>
+</div>
+
+<!-- PASSPORT PAGE -->
+<div class="page" id="page-passport">
+  <div class="page-header">
+    <h1>My Coffee Passport</h1>
+    <p>Your personal journey through the world of specialty coffee.</p>
+  </div>
+
+  <div class="passport-header">
+    <div class="passport-book">☕</div>
+    <div class="passport-info">
+      <h2>Coffee Traveler</h2>
+      <p style="color:rgba(245,236,215,0.7); font-size:0.85rem; margin-bottom:0.5rem;">World Bean Passport — Est. 2024</p>
+      <p style="color:rgba(245,236,215,0.5); font-size:0.78rem;">Your curated collection of globally sourced specialty coffees</p>
+    </div>
+  </div>
+
+  <div class="passport-stats">
+    <div class="stat-card">
+      <span class="stat-num" id="stat-tried">0</span>
+      <span class="stat-label">Beans Tried</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-countries">0</span>
+      <span class="stat-label">Countries</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-favorites">0</span>
+      <span class="stat-label">Favorites</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num" id="stat-rating">—</span>
+      <span class="stat-label">Avg Rating</span>
+    </div>
+  </div>
+
+  <div class="stamps-section">
+    <h3>Your Collection Stamps</h3>
+    <div class="stamps-grid" id="stamps-grid"></div>
+  </div>
+</div>
+
+<!-- DISCOVER PAGE -->
+<div class="page" id="page-discover">
+  <div class="page-header">
+    <h1>Discover New Beans</h1>
+    <p>Curated recommendations based on your coffee journey and taste profile.</p>
+  </div>
+
+  <div class="taste-profile">
+    <h3>Your Taste Profile</h3>
+    <div class="taste-grid" id="taste-grid"></div>
+  </div>
+
+  <div class="rec-section">
+    <h3>Because You Loved These</h3>
+    <p>Beans that share flavor DNA with your highest-rated picks</p>
+    <div class="rec-scroll" id="rec-similar"></div>
+  </div>
+
+  <div class="rec-section">
+    <h3>New Arrivals You'll Adore</h3>
+    <p>Fresh crops matched to your palate profile</p>
+    <div class="rec-scroll" id="rec-new"></div>
+  </div>
+
+  <div class="rec-section">
+    <h3>Expand Your Horizons</h3>
+    <p>Adventurous picks just outside your comfort zone</p>
+    <div class="rec-scroll" id="rec-adventure"></div>
+  </div>
+</div>
+
+<!-- SEARCH PAGE -->
+<div class="page" id="page-search">
+  <div class="page-header">
+    <h1>Advanced Search</h1>
+    <p>Filter by origin, flavor, roast, processing method, and more.</p>
+  </div>
+
+  <div class="search-panel">
+    <div class="filters-card">
+      <h3>Filter Beans</h3>
+
+      <div class="filter-group">
+        <span class="filter-label">Origin Region</span>
+        <select class="filter-select" id="f-region">
+          <option value="">All Regions</option>
+          <option>Africa</option>
+          <option>Central America</option>
+          <option>South America</option>
+          <option>Southeast Asia</option>
+          <option>Middle East</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Roast Level</span>
+        <div class="checkbox-group" id="f-roast">
+          <button class="checkbox-pill" onclick="togglePill(this)">Light</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Medium</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Medium-Dark</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Dark</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Flavor Notes</span>
+        <div class="checkbox-group" id="f-flavor">
+          <button class="checkbox-pill" onclick="togglePill(this)">Fruity</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Chocolatey</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Nutty</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Floral</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Earthy</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Spicy</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Citrus</button>
+          <button class="checkbox-pill" onclick="togglePill(this)">Caramel</button>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Processing Method</span>
+        <select class="filter-select" id="f-process">
+          <option value="">Any Method</option>
+          <option>Washed</option>
+          <option>Natural</option>
+          <option>Honey</option>
+          <option>Wet-Hulled</option>
+          <option>Anaerobic</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Altitude (masl)</span>
+        <input type="range" class="range-slider" id="f-altitude" min="500" max="2500" value="1500" oninput="document.getElementById('alt-val').textContent=this.value+'m'">
+        <div class="range-labels"><span>500m</span><span id="alt-val">1500m</span><span>2500m</span></div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Acidity Level</span>
+        <input type="range" class="range-slider" id="f-acidity" min="1" max="10" value="5" oninput="document.getElementById('acid-val').textContent=this.value+'/10'">
+        <div class="range-labels"><span>Low</span><span id="acid-val">5/10</span><span>High</span></div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Body</span>
+        <input type="range" class="range-slider" id="f-body" min="1" max="10" value="5" oninput="document.getElementById('body-val').textContent=this.value+'/10'">
+        <div class="range-labels"><span>Light</span><span id="body-val">5/10</span><span>Full</span></div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Sustainability Rating</span>
+        <select class="filter-select" id="f-sustain">
+          <option value="">Any</option>
+          <option>★★★★★ Exceptional</option>
+          <option>★★★★ Very Good</option>
+          <option>★★★ Good</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Price Range (per 250g)</span>
+        <input type="range" class="range-slider" id="f-price" min="5" max="60" value="30" oninput="document.getElementById('price-val').textContent='$'+this.value">
+        <div class="range-labels"><span>$5</span><span id="price-val">$30</span><span>$60</span></div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Only Show</span>
+        <div class="checkbox-group">
+          <button class="checkbox-pill" id="f-favorites" onclick="togglePill(this)">My Favorites</button>
+          <button class="checkbox-pill" id="f-untried" onclick="togglePill(this)">Not Tried Yet</button>
+          <button class="checkbox-pill" id="f-certified" onclick="togglePill(this)">Fair Trade</button>
+        </div>
+      </div>
+
+      <button class="search-btn" onclick="runSearch()">Search Beans</button>
+    </div>
+
+    <div id="search-results">
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>Set your filters</h3>
+        <p>Adjust the parameters to find your perfect bean</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD PAGE -->
+<div class="page" id="page-leaderboard">
+  <div class="page-header">
+    <h1>Bean Rankings</h1>
+    <p>Your personal leaderboard — sorted by your ratings, tries, and sustainability scores.</p>
+  </div>
+
+  <div class="leaderboard-table">
+    <div class="lb-header">
+      <div>#</div>
+      <div>Bean</div>
+      <div>Your Rating</div>
+      <div>Price</div>
+      <div>Eco Score</div>
+    </div>
+    <div id="leaderboard-rows"></div>
+  </div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page" id="page-cart">
+  <div class="page-header">
+    <h1>Your Cart</h1>
+    <p>Review your selection and proceed to checkout.</p>
+  </div>
+
+  <div class="cart-layout">
+    <div>
+      <div class="cart-items" id="cart-items-list">
+        <div class="empty-state">
+          <div class="icon">🛒</div>
+          <h3>Your cart is empty</h3>
+          <p>Head to Explore to add some amazing beans</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Subtotal</span><span id="sum-subtotal">$0.00</span></div>
+      <div class="summary-row"><span>Shipping</span><span id="sum-shipping">$0.00</span></div>
+      <div class="summary-row"><span>Tax (8%)</span><span id="sum-tax">$0.00</span></div>
+      <div class="summary-row total"><span>Total</span><span id="sum-total">$0.00</span></div>
+
+      <label class="gift-toggle">
+        <input type="checkbox" id="gift-check" onchange="toggleGift(this)">
+        🎁 Send as a Gift
+      </label>
+
+      <div class="gift-fields" id="gift-fields">
+        <input class="gift-field" placeholder="Recipient Name" id="gift-name">
+        <input class="gift-field" placeholder="Recipient Email" id="gift-email">
+        <input class="gift-field" placeholder="Your Name (sender)" id="gift-sender">
+        <textarea class="gift-field" placeholder="Personal message (optional)..." id="gift-msg"></textarea>
+        <input class="gift-field" placeholder="Gift delivery date (optional)" type="date" id="gift-date">
+      </div>
+
+      <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal" id="modal-content">
+    <h2>Complete Your Order</h2>
+    <div id="checkout-form">
+      <div class="modal-field-group">
+        <label class="modal-label">Full Name</label>
+        <input class="modal-input" placeholder="Jane Smith" id="co-name">
+      </div>
+      <div class="modal-field-group">
+        <label class="modal-label">Email Address</label>
+        <input class="modal-input" type="email" placeholder="jane@email.com" id="co-email">
+      </div>
+      <div class="modal-field-group">
+        <label class="modal-label">Shipping Address</label>
+        <input class="modal-input" placeholder="Street address" id="co-addr" style="margin-bottom:6px">
+        <div class="modal-grid-2">
+          <input class="modal-input" placeholder="City" id="co-city">
+          <input class="modal-input" placeholder="ZIP / Postcode" id="co-zip">
+        </div>
+      </div>
+      <div class="modal-field-group">
+        <label class="modal-label">Payment</label>
+        <input class="modal-input" placeholder="Card number" id="co-card" style="margin-bottom:6px">
+        <div class="modal-grid-2">
+          <input class="modal-input" placeholder="MM/YY" id="co-exp">
+          <input class="modal-input" placeholder="CVV" id="co-cvv">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeCheckout()">Cancel</button>
+        <button class="modal-confirm" onclick="placeOrder()">Place Order →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BEANS = [
+  { id:1, name:'Yirgacheffe Grade 1', country:'Ethiopia', flag:'🇪🇹', region:'Africa', icon:'🫘', roast:'Light', process:'Washed', altitude:1900, acidity:9, body:5, price:28, sustain:5, fairTrade:true, tags:['Floral','Citrus','Fruity'], flavors:{Acidity:9, Body:5, Sweetness:8, Bitterness:3} },
+  { id:2, name:'Sidama Bombe Natural', country:'Ethiopia', flag:'🇪🇹', region:'Africa', icon:'🫘', roast:'Light', process:'Natural', altitude:2100, acidity:8, body:6, price:32, sustain:5, fairTrade:true, tags:['Fruity','Floral','Chocolatey'], flavors:{Acidity:8, Body:6, Sweetness:9, Bitterness:2} },
+  { id:3, name:'Gesha 1931', country:'Panama', flag:'🇵🇦', region:'Central America', icon:'☕', roast:'Light', process:'Natural', altitude:1800, acidity:9, body:4, price:58, sustain:4, fairTrade:false, tags:['Floral','Fruity','Citrus'], flavors:{Acidity:9, Body:4, Sweetness:9, Bitterness:1} },
+  { id:4, name:'Huila Honey Process', country:'Colombia', flag:'🇨🇴', region:'South America', icon:'🫘', roast:'Medium', process:'Honey', altitude:1700, acidity:7, body:7, price:22, sustain:4, fairTrade:true, tags:['Caramel','Chocolatey','Nutty'], flavors:{Acidity:7, Body:7, Sweetness:8, Bitterness:4} },
+  { id:5, name:'Antigua Bourbon', country:'Guatemala', flag:'🇬🇹', region:'Central America', icon:'☕', roast:'Medium', process:'Washed', altitude:1600, acidity:6, body:7, price:19, sustain:4, fairTrade:true, tags:['Chocolatey','Nutty','Caramel'], flavors:{Acidity:6, Body:7, Sweetness:7, Bitterness:5} },
+  { id:6, name:'Sumatra Mandheling', country:'Indonesia', flag:'🇮🇩', region:'Southeast Asia', icon:'☕', roast:'Dark', process:'Wet-Hulled', altitude:1200, acidity:3, body:10, price:18, sustain:3, fairTrade:false, tags:['Earthy','Spicy','Chocolatey'], flavors:{Acidity:3, Body:10, Sweetness:5, Bitterness:8} },
+  { id:7, name:'Kenya Kirinyaga AA', country:'Kenya', flag:'🇰🇪', region:'Africa', icon:'🫘', roast:'Light', process:'Washed', altitude:1800, acidity:9, body:5, price:26, sustain:5, fairTrade:true, tags:['Fruity','Citrus','Floral'], flavors:{Acidity:9, Body:5, Sweetness:7, Bitterness:3} },
+  { id:8, name:'Yemen Mokha Mattari', country:'Yemen', flag:'🇾🇪', region:'Middle East', icon:'☕', roast:'Medium', process:'Natural', altitude:2000, acidity:7, body:6, price:42, sustain:3, fairTrade:false, tags:['Spicy','Earthy','Chocolatey'], flavors:{Acidity:7, Body:6, Sweetness:6, Bitterness:6} },
+  { id:9, name:'Bourbon Peaberry', country:'Rwanda', flag:'🇷🇼', region:'Africa', icon:'🫘', roast:'Medium', process:'Washed', altitude:1750, acidity:8, body:6, price:24, sustain:5, fairTrade:true, tags:['Fruity','Caramel','Floral'], flavors:{Acidity:8, Body:6, Sweetness:8, Bitterness:3} },
+  { id:10, name:'Tarrazu SHB', country:'Costa Rica', flag:'🇨🇷', region:'Central America', icon:'☕', roast:'Medium-Dark', process:'Honey', altitude:1650, acidity:6, body:7, price:20, sustain:5, fairTrade:true, tags:['Caramel','Chocolatey','Citrus'], flavors:{Acidity:6, Body:7, Sweetness:7, Bitterness:5} },
+  { id:11, name:'Sulawesi Toraja', country:'Indonesia', flag:'🇮🇩', region:'Southeast Asia', icon:'☕', roast:'Medium-Dark', process:'Wet-Hulled', altitude:1100, acidity:4, body:9, price:21, sustain:3, fairTrade:false, tags:['Earthy','Spicy','Nutty'], flavors:{Acidity:4, Body:9, Sweetness:5, Bitterness:7} },
+  { id:12, name:'Antiga Typica Anaerobic', country:'Peru', flag:'🇵🇪', region:'South America', icon:'🫘', roast:'Light', process:'Anaerobic', altitude:1900, acidity:8, body:6, price:35, sustain:4, fairTrade:true, tags:['Fruity','Floral','Citrus'], flavors:{Acidity:8, Body:6, Sweetness:9, Bitterness:2} },
+];
+
+let tried = new Set(JSON.parse(localStorage.getItem('tried')||'[]'));
+let favorites = new Set(JSON.parse(localStorage.getItem('favorites')||'[]'));
+let ratings = JSON.parse(localStorage.getItem('ratings')||'{}');
+let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+
+function save() {
+  localStorage.setItem('tried', JSON.stringify([...tried]));
+  localStorage.setItem('favorites', JSON.stringify([...favorites]));
+  localStorage.setItem('ratings', JSON.stringify(ratings));
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const tabs = ['explore','passport','discover','search','leaderboard','cart'];
+  const idx = tabs.indexOf(page);
+  if(idx>=0) document.querySelectorAll('.nav-tab')[idx] && document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+
+  if(page==='passport') renderPassport();
+  if(page==='leaderboard') renderLeaderboard();
+  if(page==='discover') renderDiscover();
+  if(page==='cart') renderCart();
+  updateCartBadge();
+}
+
+function starHTML(beanId, size='0.85rem') {
+  const r = ratings[beanId] || 0;
+  return [1,2,3,4,5].map(i=>`<span class="star" style="font-size:${size};color:${i<=r?'#D4A843':'#D3C5B5'}" onclick="rate(${beanId},${i})">★</span>`).join('');
+}
+
+function sustainHTML(score) {
+  return `<div class="sustain-dots">${[1,2,3,4,5].map(i=>`<div class="sustain-dot ${i<=score?'filled':''}"></div>`).join('')}</div>`;
+}
+
+function sustainLabel(score) {
+  return ['','Poor','Fair','Good','Very Good','Exceptional'][score];
+}
+
+function beanCardHTML(b) {
+  const isTried = tried.has(b.id);
+  const isFav = favorites.has(b.id);
+  const cartItem = cart.find(c=>c.id===b.id);
+  return `
+    <div class="bean-card">
+      <div class="bean-card-img">
+        ${b.icon}
+        <div class="bean-country-flag">${b.flag}</div>
+        ${isTried ? '<div class="tried-stamp">✓ Tried</div>' : ''}
+        <div class="fav-stamp" onclick="toggleFav(${b.id})">${isFav?'❤️':'🤍'}</div>
+      </div>
+      <div class="bean-card-body">
+        <div class="bean-name">${b.name}</div>
+        <div class="bean-origin">${b.flag} ${b.country} · ${b.roast} Roast · ${b.process}</div>
+        <div class="stars-row">${starHTML(b.id)}</div>
+        <div class="bean-tags">${b.tags.map(t=>`<span class="tag">${t}</span>`).join('')}${b.fairTrade?'<span class="tag" style="background:rgba(74,124,89,0.1);color:#4A7C59">Fair Trade</span>':''}</div>
+        ${Object.entries(b.flavors).map(([k,v])=>`
+          <div class="bean-flavor-bar">
+            <div class="flavor-label"><span>${k}</span><span>${v}/10</span></div>
+            <div class="flavor-track"><div class="flavor-fill" style="width:${v*10}%"></div></div>
+          </div>`).join('')}
+        <div class="sustainability">
+          ${sustainHTML(b.sustain)}
+          <span class="sustain-label">Eco: ${sustainLabel(b.sustain)}</span>
+          <span style="font-size:0.68rem;color:var(--muted)">${b.altitude}m alt.</span>
+        </div>
+        <div class="bean-price-row">
+          <div class="bean-price">$${b.price} <span>/ 250g</span></div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <button class="tried-btn ${isTried?'active':''}" onclick="toggleTried(${b.id})">${isTried?'✓ Tried':'Mark Tried'}</button>
+            <button class="add-cart-btn" onclick="addToCart(${b.id})">+ Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderExplore(beans) {
+  document.getElementById('explore-grid').innerHTML = (beans||BEANS).map(beanCardHTML).join('');
+}
+
+function toggleTried(id) {
+  if(tried.has(id)) tried.delete(id); else tried.add(id);
+  save();
+  renderExplore();
+  updateCartBadge();
+  showToast(tried.has(id)?'Marked as tried! Stamp collected.':'Removed from tried');
+}
+
+function toggleFav(id) {
+  if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+  save();
+  renderExplore();
+  showToast(favorites.has(id)?'Added to favorites ❤️':'Removed from favorites');
+}
+
+function rate(id, val) {
+  ratings[id] = val;
+  save();
+  renderExplore();
+  showToast(`Rated ${val} star${val>1?'s':''}!`);
+}
+
+function addToCart(id) {
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cart.push({id, qty:1});
+  save();
+  updateCartBadge();
+  showToast('Added to cart 🛒');
+}
+
+function updateCartBadge() {
+  const total = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cart-count').textContent = total;
+}
+
+function renderPassport() {
+  const triedBeans = BEANS.filter(b=>tried.has(b.id));
+  const countries = new Set(triedBeans.map(b=>b.country));
+  const avgRating = triedBeans.length ? (triedBeans.reduce((s,b)=>s+(ratings[b.id]||0),0)/triedBeans.length).toFixed(1) : '—';
+
+  document.getElementById('stat-tried').textContent = triedBeans.length;
+  document.getElementById('stat-countries').textContent = countries.size;
+  document.getElementById('stat-favorites').textContent = favorites.size;
+  document.getElementById('stat-rating').textContent = avgRating;
+
+  document.getElementById('stamps-grid').innerHTML = BEANS.map(b=>{
+    const earned = tried.has(b.id);
+    return `<div class="stamp ${earned?'earned':''}">
+      ${earned?'<span class="stamp-check">✅</span>':''}
+      <div class="stamp-icon">${b.flag}</div>
+      <div class="stamp-name">${b.name}</div>
+      <div class="stamp-country">${b.country}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLeaderboard() {
+  const sorted = [...BEANS].filter(b=>tried.has(b.id)).sort((a,b)=>(ratings[b.id]||0)-(ratings[a.id]||0));
+  if(!sorted.length) {
+    document.getElementById('leaderboard-rows').innerHTML = '<div class="empty-state"><div class="icon">🏆</div><h3>No beans tried yet</h3><p>Mark some beans as tried to see your rankings</p></div>';
+    return;
+  }
+  document.getElementById('leaderboard-rows').innerHTML = sorted.map((b,i)=>`
+    <div class="lb-row">
+      <div class="lb-rank ${i<3?'top':''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="lb-bean-info">
+        <div class="lb-bean-icon">${b.flag}</div>
+        <div>
+          <div class="lb-bean-name">${b.name}</div>
+          <div class="lb-bean-origin">${b.country} · ${b.roast}</div>
+        </div>
+      </div>
+      <div class="lb-rating">${[1,2,3,4,5].map(s=>`<span style="color:${s<=(ratings[b.id]||0)?'#D4A843':'#D3C5B5'}">★</span>`).join('')}</div>
+      <div class="lb-price">$${b.price}</div>
+      <div class="lb-sustain">${sustainHTML(b.sustain)}</div>
+    </div>`).join('');
+}
+
+function renderDiscover() {
+  const triedBeans = BEANS.filter(b=>tried.has(b.id));
+  const untried = BEANS.filter(b=>!tried.has(b.id));
+
+  let topTags = {};
+  triedBeans.forEach(b=>b.tags.forEach(t=>{topTags[t]=(topTags[t]||0)+1;}));
+  const tasteArr = Object.entries(topTags).sort((a,b)=>b[1]-a[1]);
+
+  if(tasteArr.length) {
+    document.getElementById('taste-grid').innerHTML = tasteArr.slice(0,6).map(([tag,count])=>`
+      <div class="taste-item">
+        <div class="taste-circle">${count}</div>
+        <div class="taste-name">${tag}</div>
+      </div>`).join('');
+  } else {
+    document.getElementById('taste-grid').innerHTML = '<p style="color:var(--muted);font-size:0.82rem;grid-column:1/-1">Try some beans to build your taste profile!</p>';
+  }
+
+  const similar = untried.filter(b=>triedBeans.some(t=>t.tags.some(tag=>b.tags.includes(tag)))).slice(0,4);
+  const newArrivals = untried.slice(0,4);
+  const adventure = untried.filter(b=>!similar.includes(b)).slice(0,4);
+
+  function recHTML(b, reason) {
+    return `<div class="rec-card" onclick="showPage('explore')">
+      <div class="rec-icon">${b.flag}</div>
+      <div>
+        <div class="rec-name">${b.name}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:3px">${b.country} · $${b.price}</div>
+        <div class="rec-reason">${reason}</div>
+        ${sustainHTML(b.sustain)}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('rec-similar').innerHTML = similar.length ? similar.map(b=>recHTML(b,'Matches your flavor profile')).join('') : '<p style="color:var(--muted);font-size:0.82rem">Try more beans to get personalized recommendations!</p>';
+  document.getElementById('rec-new').innerHTML = newArrivals.map(b=>recHTML(b,'New crop just arrived')).join('');
+  document.getElementById('rec-adventure').innerHTML = adventure.length ? adventure.map(b=>recHTML(b,'Expand your palate')).join('') : similar.map(b=>recHTML(b,'You might enjoy this')).join('');
+}
+
+function renderCart() {
+  const list = document.getElementById('cart-items-list');
+  if(!cart.length) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><h3>Your cart is empty</h3><p>Head to Explore to add some amazing beans</p></div>';
+    updateSummary();
+    return;
+  }
+  list.innerHTML = cart.map(c=>{
+    const b = BEANS.find(bean=>bean.id===c.id);
+    return `<div class="cart-item">
+      <div class="cart-item-icon">${b.flag}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${b.name}</div>
+        <div class="cart-item-origin">${b.country} · ${b.roast} · $${b.price}/250g</div>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(${b.id},-1)">−</button>
+        <span class="qty-num">${c.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${b.id},1)">+</button>
+      </div>
+      <div class="cart-item-price">$${(b.price*c.qty).toFixed(2)}</div>
+      <button class="remove-btn" onclick="removeFromCart(${b.id})">✕</button>
+    </div>`;
+  }).join('');
+  updateSummary();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty = Math.max(1, item.qty+delta);
+  save(); renderCart(); updateCartBadge();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c=>c.id!==id);
+  save(); renderCart(); updateCartBadge();
+}
+
+function updateSummary() {
+  const subtotal = cart.reduce((s,c)=>{const b=BEANS.find(bean=>bean.id===c.id);return s+b.price*c.qty;},0);
+  const shipping = subtotal>0?(subtotal>50?0:9.95):0;
+  const tax = subtotal*0.08;
+  const total = subtotal+shipping+tax;
+  document.getElementById('sum-subtotal').textContent = '$'+subtotal.toFixed(2);
+  document.getElementById('sum-shipping').textContent = shipping===0?'Free':'$'+shipping.toFixed(2);
+  document.getElementById('sum-tax').textContent = '$'+tax.toFixed(2);
+  document.getElementById('sum-total').textContent = '$'+total.toFixed(2);
+}
+
+function toggleGift(el) {
+  document.getElementById('gift-fields').classList.toggle('open', el.checked);
+}
+
+function togglePill(el) {
+  el.classList.toggle('active');
+}
+
+function runSearch() {
+  const region = document.getElementById('f-region').value;
+  const process = document.getElementById('f-process').value;
+  const maxPrice = parseInt(document.getElementById('f-price').value);
+  const maxAcid = parseInt(document.getElementById('f-acidity').value);
+  const maxBody = parseInt(document.getElementById('f-body').value);
+  const roasts = [...document.querySelectorAll('#f-roast .active')].map(el=>el.textContent);
+  const flavors = [...document.querySelectorAll('#f-flavor .active')].map(el=>el.textContent);
+  const onlyFav = document.getElementById('f-favorites').classList.contains('active');
+  const onlyUntried = document.getElementById('f-untried').classList.contains('active');
+  const onlyCert = document.getElementById('f-certified').classList.contains('active');
+
+  let results = BEANS.filter(b=>{
+    if(region && b.region!==region) return false;
+    if(process && b.process!==process) return false;
+    if(b.price>maxPrice) return false;
+    if(b.acidity>maxAcid) return false;
+    if(b.body>maxBody) return false;
+    if(roasts.length && !roasts.includes(b.roast)) return false;
+    if(flavors.length && !flavors.some(f=>b.tags.includes(f))) return false;
+    if(onlyFav && !favorites.has(b.id)) return false;
+    if(onlyUntried && tried.has(b.id)) return false;
+    if(onlyCert && !b.fairTrade) return false;
+    return true;
+  });
+
+  const container = document.getElementById('search-results');
+  if(!results.length) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">😔</div><h3>No beans found</h3><p>Try adjusting your filters</p></div>';
+  } else {
+    container.innerHTML = `<p style="color:var(--muted);font-size:0.82rem;margin-bottom:1rem">${results.length} bean${results.length>1?'s':''} found</p><div class="beans-grid">${results.map(beanCardHTML).join('')}</div>`;
+  }
+}
+
+function openCheckout() {
+  if(!cart.length) { showToast('Your cart is empty!'); return; }
+  document.getElementById('checkout-modal').classList.add('open');
+}
+
+function closeCheckout() {
+  document.getElementById('checkout-modal').classList.remove('open');
+}
+
+function placeOrder() {
+  const name = document.getElementById('co-name').value;
+  const email = document.getElementById('co-email').value;
+  if(!name || !email) { showToast('Please fill in your name and email'); return; }
+
+  document.getElementById('checkout-form').innerHTML = `
+    <div class="success-screen">
+      <div class="success-icon">🎉</div>
+      <h2>Order Confirmed!</h2>
+      <p style="margin-bottom:0.5rem">Thank you, ${name}! Your beans are on their way.</p>
+      <p style="margin-bottom:1rem">Confirmation sent to <strong>${email}</strong></p>
+      ${document.getElementById('gift-check').checked?`<p style="color:var(--stamp-green);margin-bottom:1rem">🎁 Gift arranged for ${document.getElementById('gift-name').value||'recipient'}</p>`:''}
+      <p style="font-size:0.78rem;color:var(--muted)">Expected delivery: 5–7 business days</p>
+      <button class="modal-confirm" style="margin-top:1.5rem;width:100%" onclick="finishOrder()">Continue Exploring</button>
+    </div>`;
+}
+
+function finishOrder() {
+  cart = [];
+  save();
+  updateCartBadge();
+  closeCheckout();
+  document.getElementById('checkout-form').innerHTML = `<div class="modal-field-group"><label class="modal-label">Full Name</label><input class="modal-input" placeholder="Jane Smith" id="co-name"></div><div class="modal-field-group"><label class="modal-label">Email Address</label><input class="modal-input" type="email" placeholder="jane@email.com" id="co-email"></div><div class="modal-field-group"><label class="modal-label">Shipping Address</label><input class="modal-input" placeholder="Street address" id="co-addr" style="margin-bottom:6px"><div class="modal-grid-2"><input class="modal-input" placeholder="City" id="co-city"><input class="modal-input" placeholder="ZIP / Postcode" id="co-zip"></div></div><div class="modal-field-group"><label class="modal-label">Payment</label><input class="modal-input" placeholder="Card number" id="co-card" style="margin-bottom:6px"><div class="modal-grid-2"><input class="modal-input" placeholder="MM/YY" id="co-exp"><input class="modal-input" placeholder="CVV" id="co-cvv"></div></div><div class="modal-actions"><button class="modal-cancel" onclick="closeCheckout()">Cancel</button><button class="modal-confirm" onclick="placeOrder()">Place Order →</button></div>`;
+  showPage('explore');
+}
+
+document.getElementById('checkout-modal').addEventListener('click', function(e){
+  if(e.target===this) closeCheckout();
+});
+
+renderExplore();
+updateCartBadge();
+</script>
+</body>
+</html>
