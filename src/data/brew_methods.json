@@ -1,0 +1,138 @@
+[
+  {
+    "id": "pour-over",
+    "name": "Pour-over",
+    "tagline": "Clean, bright, and full of detail",
+    "description": "The slow, meditative one. Pour-over gives you a clean cup that lets every flavor shine — you'll taste things you'd miss in other methods. It takes a little patience, but it's worth it.",
+    "difficulty": "Intermediate",
+    "brew_time": "3–4 minutes",
+    "grind_size": "Medium-fine",
+    "water_temp": "200–205°F (93–96°C)",
+    "ratio": "1:16 (coffee to water)",
+    "equipment": ["Dripper (V60, Kalita, Chemex)", "Paper filter", "Gooseneck kettle", "Scale", "Timer"],
+    "steps": [
+      "Bring water to 200–205°F. Rinse the paper filter with hot water and discard the rinse water.",
+      "Add 20g of medium-fine ground coffee to the dripper.",
+      "Start your timer. Pour just enough water (about 40g) to wet all the grounds — this is the bloom. Wait 30 seconds.",
+      "Slowly pour the remaining water in gentle circles, keeping the water level steady. Aim to hit 320g total by 2:30.",
+      "Let it drain completely. Total brew time should be around 3:00–3:30.",
+      "Swirl your cup gently. Take a sip. Notice what you taste."
+    ],
+    "best_for": "Light and medium roasts, washed process beans, single-origin coffees where you want to taste the origin character. Ethiopian florals, Kenyan fruit-forward lots, and Colombian caramels all shine here.",
+    "flavor_impact": "Highlights clarity, acidity, and delicate flavors. If a bean has floral or fruity notes, pour-over is where you'll find them.",
+    "icon": "pourover"
+  },
+  {
+    "id": "french-press",
+    "name": "French press",
+    "tagline": "Rich, full-bodied, and forgiving",
+    "description": "The no-fuss classic. French press makes a thick, rich cup with plenty of body. It's forgiving if your grind isn't perfect, and it's great for sharing — just make a big batch.",
+    "difficulty": "Beginner",
+    "brew_time": "4 minutes",
+    "grind_size": "Coarse",
+    "water_temp": "200°F (93°C)",
+    "ratio": "1:15 (coffee to water)",
+    "equipment": ["French press", "Kettle", "Coarse grinder (burr preferred)"],
+    "steps": [
+      "Bring water to 200°F. Add 30g of coarsely ground coffee to the press.",
+      "Pour 450g of hot water over the grounds. Make sure all the coffee is wet.",
+      "Place the lid on top (don't press yet) and wait 4 minutes.",
+      "Press the plunger down slowly and steadily.",
+      "Pour immediately — don't let it sit in the press, or it'll keep extracting and turn bitter."
+    ],
+    "best_for": "Medium and dark roasts, natural process beans, anything with chocolate, nut, or caramel notes. Great for Brazilian and Sumatran coffees.",
+    "flavor_impact": "Emphasizes body and sweetness. The metal mesh filter lets oils through, giving you a heavier mouthfeel than paper-filtered methods.",
+    "icon": "frenchpress"
+  },
+  {
+    "id": "aeropress",
+    "name": "AeroPress",
+    "tagline": "Versatile, fast, and hard to mess up",
+    "description": "The experimenter's favorite. AeroPress is quick, portable, and incredibly forgiving — you can make anything from a clean, tea-like cup to a concentrated espresso-style shot. There are hundreds of recipes because everyone has a different favorite.",
+    "difficulty": "Beginner",
+    "brew_time": "1–2 minutes",
+    "grind_size": "Medium to fine",
+    "water_temp": "185–205°F (85–96°C)",
+    "ratio": "1:12 to 1:16 (depends on recipe)",
+    "equipment": ["AeroPress", "Paper or metal filter", "Kettle", "Stirrer"],
+    "steps": [
+      "Place a filter in the cap and rinse with hot water. Attach to the AeroPress chamber.",
+      "Add 15g of medium-ground coffee. Set on a sturdy mug.",
+      "Pour 200g of water at 195°F. Stir gently for 10 seconds.",
+      "Insert the plunger to create a seal (this stops the drip). Wait 1 minute.",
+      "Press down slowly and steadily for about 30 seconds. Stop when you hear a hiss.",
+      "Dilute with hot water if you want a longer cup, or drink it as-is for intensity."
+    ],
+    "best_for": "Everything, honestly. Light roasts come out clean and bright, dark roasts come out smooth without bitterness. Especially good for travel and single servings.",
+    "flavor_impact": "Depends on your recipe — lower temp and coarser grind gives a tea-like clarity; higher temp and finer grind gives body and concentration. That's the fun of it.",
+    "icon": "aeropress"
+  },
+  {
+    "id": "espresso",
+    "name": "Espresso",
+    "tagline": "Concentrated, intense, and rewarding",
+    "description": "The deep end. Espresso is coffee at its most concentrated — a small, powerful shot that reveals everything about a bean, good and bad. It takes practice and proper equipment, but nothing else tastes quite like it.",
+    "difficulty": "Advanced",
+    "brew_time": "25–30 seconds",
+    "grind_size": "Very fine",
+    "water_temp": "195–205°F (90–96°C)",
+    "ratio": "1:2 (18g in, 36g out)",
+    "equipment": ["Espresso machine", "Burr grinder (essential)", "Tamper", "Scale", "Timer"],
+    "steps": [
+      "Grind 18g of coffee very fine — it should feel like fine sand.",
+      "Distribute the grounds evenly in the portafilter. Tamp with firm, level pressure.",
+      "Lock the portafilter in and start the shot. You're aiming for 36g of liquid in 25–30 seconds.",
+      "Watch the stream — it should look like warm honey. If it gushes, grind finer. If it barely drips, grind coarser.",
+      "Taste it. A good shot balances sweetness, acidity, and a touch of bitterness."
+    ],
+    "best_for": "Medium to dark roasts, blends designed for espresso, natural process beans with chocolate and fruit notes. Some light roast single-origins make stunning espresso if you dial them in.",
+    "flavor_impact": "Concentrates everything — acidity becomes snappy, sweetness becomes syrupy, body becomes thick. Crema adds a creamy texture on top.",
+    "icon": "espresso"
+  },
+  {
+    "id": "cold-brew",
+    "name": "Cold brew",
+    "tagline": "Smooth, sweet, and make-ahead",
+    "description": "The patient one. Cold brew steeps overnight and rewards you with an ultra-smooth, naturally sweet concentrate. It's mellow, low-acid, and perfect for hot days or for people who find hot coffee too intense.",
+    "difficulty": "Beginner",
+    "brew_time": "12–24 hours",
+    "grind_size": "Extra coarse",
+    "water_temp": "Room temperature or cold",
+    "ratio": "1:8 (concentrate) or 1:15 (ready to drink)",
+    "equipment": ["Large jar or pitcher", "Coarse grinder", "Strainer or cheesecloth"],
+    "steps": [
+      "Grind 100g of coffee extra coarse — like raw sugar.",
+      "Combine with 800g of room-temperature water in a large jar. Stir to make sure all grounds are wet.",
+      "Cover and leave at room temperature or in the fridge for 12–24 hours. Longer = stronger.",
+      "Strain through a fine mesh strainer or cheesecloth. Strain a second time if you want extra clarity.",
+      "Dilute the concentrate 1:1 with water or milk. Pour over ice.",
+      "Keeps in the fridge for up to two weeks."
+    ],
+    "best_for": "Medium and dark roasts, chocolatey and nutty beans, natural process coffees. Brazilian and Colombian coffees make especially smooth cold brew.",
+    "flavor_impact": "Strips away most acidity and bitterness, leaving sweetness and body. Delicate floral notes won't survive cold brew — this method favors bold, simple flavors.",
+    "icon": "coldbrew"
+  },
+  {
+    "id": "moka-pot",
+    "name": "Moka pot",
+    "tagline": "Stovetop, strong, and classic",
+    "description": "The Italian staple. A Moka pot makes a strong, concentrated brew that's somewhere between drip and espresso. It's dramatic (steam pressure!), affordable, and makes your kitchen smell incredible.",
+    "difficulty": "Intermediate",
+    "brew_time": "4–5 minutes",
+    "grind_size": "Medium-fine",
+    "water_temp": "Starts with hot water",
+    "ratio": "Fill the basket, fill the water to the valve",
+    "equipment": ["Moka pot", "Stove", "Grinder", "Cold towel"],
+    "steps": [
+      "Fill the bottom chamber with hot water up to the safety valve.",
+      "Fill the filter basket with medium-fine ground coffee. Level it off — don't tamp.",
+      "Assemble the pot and place on medium heat. Leave the lid open so you can watch.",
+      "When coffee starts flowing into the upper chamber, it should be a steady, honey-colored stream.",
+      "When you hear sputtering and the stream turns pale, remove from heat immediately. Wrap the base in a cold, wet towel to stop extraction.",
+      "Pour and enjoy — it's strong, so add hot water if you want an Americano-style cup."
+    ],
+    "best_for": "Medium to dark roasts, traditional blends, and beans with chocolate, caramel, and spice notes. Great for Italian and Brazilian coffees.",
+    "flavor_impact": "Produces a concentrated, full-bodied cup with some crema. More intense than drip but less pressurized than true espresso. Highlights sweetness and body over delicate acidity.",
+    "icon": "mokapot"
+  }
+]
