@@ -70,7 +70,14 @@ Reference these personas when evaluating — they represent the app's core audie
 
 ## Working with user feedback
 
-The app has sample user feedback in `references/sample-feedback.md`. When synthesizing feedback:
+The app has extensive research data in the `references/` directory:
+
+- `references/sample-feedback.md` — Survey results, Slack observations, and summary usability notes
+- `references/usability-sessions/` — 5 full moderated usability session transcripts (Sarah K., Marcus T., Priya M., Devon R., Lisa Chen) with task-by-task observations
+- `references/interviews/` — 3 semi-structured interview transcripts (Jordan W., Rachel S., Tom H.) exploring coffee habits, app expectations, and feature wishlists
+- `references/ux-research-data.xlsx` — Quantitative data with 5 sheets: Task Completion (25 task attempts with timing/errors), SUS Scores (System Usability Scale), Error & Friction Log (15 coded errors), Coded Themes (15 themes with frequency/severity), and NPS & Satisfaction scores
+
+When synthesizing feedback:
 
 1. Read the raw feedback first — don't summarize from memory
 2. Look for patterns across multiple users, not just loud individual complaints
