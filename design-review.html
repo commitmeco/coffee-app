@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee App — Design Team Screen Review</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0F0F0F;
+    --bg-card: #141414;
+    --bg-elevated: #1A1A1A;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(200,149,108,0.4);
+    --text: #E8E4E0;
+    --text-mid: #B8B0A8;
+    --text-dim: #7A7470;
+    --caramel: #C8956C;
+    --caramel-light: #D4A87A;
+    --sage: #6B9E78;
+    --red: #D4645C;
+    --cream-bg: #F5F0EB;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(15,15,15,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .header h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .header h1 span { color: var(--caramel); }
+  .header-actions { display: flex; gap: 12px; }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary {
+    background: var(--caramel);
+    color: var(--bg);
+  }
+  .btn-primary:hover { background: var(--caramel-light); }
+  .btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--border-hover); }
+  .btn-danger {
+    background: rgba(212,100,92,0.15);
+    color: var(--red);
+    border: 1px solid rgba(212,100,92,0.2);
+  }
+  .btn-danger:hover { background: rgba(212,100,92,0.25); }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 3px;
+    background: var(--bg-elevated);
+    position: sticky;
+    top: 73px;
+    z-index: 99;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--caramel);
+    transition: width 0.4s ease;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+  }
+
+  /* Intro */
+  .intro {
+    margin-bottom: 40px;
+    padding: 28px 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .intro h2 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: var(--caramel);
+  }
+  .intro p {
+    color: var(--text-mid);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .intro .reviewer-field {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .intro .reviewer-field label {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .intro .reviewer-field input {
+    flex: 1;
+    max-width: 300px;
+    padding: 8px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+  }
+  .intro .reviewer-field input:focus {
+    outline: none;
+    border-color: var(--caramel);
+  }
+
+  /* Screen nav sidebar */
+  .screen-nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 50;
+  }
+  .screen-nav a {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .screen-nav a:hover,
+  .screen-nav a.active {
+    background: var(--caramel);
+    border-color: var(--caramel);
+    transform: scale(1.3);
+  }
+  .screen-nav a .tooltip {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    white-space: nowrap;
+    color: var(--text);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .screen-nav a:hover .tooltip { opacity: 1; }
+  .screen-nav a.has-feedback::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--sage);
+  }
+
+  /* Screen card */
+  .screen-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .screen-card.has-feedback {
+    border-color: rgba(107,158,120,0.3);
+  }
+
+  .screen-header {
+    padding: 24px 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .screen-header-left h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .screen-header-left .route {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    color: var(--caramel);
+    background: rgba(200,149,108,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .screen-header-left .description {
+    color: var(--text-mid);
+    font-size: 13px;
+    max-width: 600px;
+  }
+  .screen-number {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 32px;
+    color: var(--bg-elevated);
+    font-weight: 700;
+    line-height: 1;
+    margin-left: 16px;
+  }
+
+  .elements-list {
+    padding: 16px 28px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid var(--border);
+  }
+  .elements-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .elements-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .element-pill {
+    font-size: 12px;
+    padding: 3px 10px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-mid);
+  }
+
+  /* Feedback form */
+  .feedback-form {
+    padding: 24px 28px;
+  }
+
+  .feedback-section {
+    margin-bottom: 24px;
+  }
+  .feedback-section:last-child { margin-bottom: 0; }
+
+  .feedback-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .feedback-section-title .icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+  }
+
+  /* Heuristic checkboxes */
+  .heuristic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .heuristic-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .heuristic-item:hover {
+    border-color: var(--border-hover);
+  }
+  .heuristic-item.flagged {
+    border-color: rgba(212,100,92,0.4);
+    background: rgba(212,100,92,0.05);
+  }
+  .heuristic-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--text-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    margin-top: 1px;
+    transition: all 0.2s;
+  }
+  .heuristic-item input[type="checkbox"]:checked {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .heuristic-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .heuristic-label {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .heuristic-label strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .heuristic-label span {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  /* Severity */
+  .severity-options {
+    display: flex;
+    gap: 8px;
+  }
+  .severity-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .severity-btn:hover { border-color: var(--border-hover); }
+  .severity-btn.selected-none {
+    border-color: rgba(107,158,120,0.5);
+    background: rgba(107,158,120,0.1);
+    color: var(--sage);
+  }
+  .severity-btn.selected-minor {
+    border-color: rgba(200,149,108,0.5);
+    background: rgba(200,149,108,0.1);
+    color: var(--caramel);
+  }
+  .severity-btn.selected-major {
+    border-color: rgba(212,160,92,0.5);
+    background: rgba(212,160,92,0.1);
+    color: #D4A05C;
+  }
+  .severity-btn.selected-critical {
+    border-color: rgba(212,100,92,0.5);
+    background: rgba(212,100,92,0.1);
+    color: var(--red);
+  }
+
+  /* Route to skill */
+  .route-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .route-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .route-chip:hover { border-color: var(--border-hover); }
+  .route-chip.selected {
+    border-color: rgba(200,149,108,0.5);
+    background: rgba(200,149,108,0.1);
+    color: var(--caramel);
+  }
+
+  /* Text areas */
+  .feedback-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.2s;
+  }
+  .feedback-textarea:focus {
+    outline: none;
+    border-color: var(--caramel);
+  }
+  .feedback-textarea::placeholder {
+    color: var(--text-dim);
+  }
+
+  /* Export modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 18px;
+  }
+  .modal-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .modal-body pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--text-mid);
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: 'Consolas', 'Monaco', monospace;
+    line-height: 1.6;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--sage);
+    color: var(--bg);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
+    z-index: 300;
+  }
+  .toast.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Summary strip */
+  .summary-strip {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(20,20,20,0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 90;
+  }
+  .summary-stats {
+    display: flex;
+    gap: 24px;
+  }
+  .summary-stat {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .summary-stat strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .heuristic-grid { grid-template-columns: 1fr; }
+    .screen-nav { display: none; }
+    .header { padding: 16px 20px; }
+    .container { padding: 20px; }
+    .feedback-form { padding: 16px 20px; }
+    .screen-header { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>☕</span> Design Team Screen Review</h1>
+  <div class="header-actions">
+    <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+    <button class="btn btn-secondary" onclick="showExport()">Preview Export</button>
+    <button class="btn btn-primary" onclick="downloadExport()">Export Feedback ↓</button>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<nav class="screen-nav" id="screenNav"></nav>
+
+<div class="container">
+  <div class="intro">
+    <h2>How this works</h2>
+    <p>Walk through the app screen by screen. For each screen, open the app at the route shown, then fill in your feedback here. Check any heuristics that feel violated, rate severity, route to the right skill, and add notes.</p>
+    <p>When you're done, hit <strong>Export Feedback</strong> — it downloads a markdown file that drops straight into the UX researcher skill's references folder.</p>
+    <div class="reviewer-field">
+      <label>Your name</label>
+      <input type="text" id="reviewerName" placeholder="e.g. Sarah" oninput="saveState()">
+    </div>
+  </div>
+
+  <div id="screenCards"></div>
+</div>
+
+<div class="summary-strip">
+  <div class="summary-stats">
+    <div class="summary-stat"><strong id="reviewedCount">0</strong> / <span id="totalScreens">0</span> screens reviewed</div>
+    <div class="summary-stat"><strong id="issueCount">0</strong> issues flagged</div>
+    <div class="summary-stat"><strong id="criticalCount">0</strong> critical</div>
+  </div>
+  <button class="btn btn-primary" onclick="downloadExport()" style="padding:8px 16px;font-size:13px;">Export ↓</button>
+</div>
+
+<div class="modal-overlay" id="exportModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Export Preview</h3>
+      <button class="btn btn-secondary" onclick="hideExport()" style="padding:6px 12px;font-size:12px;">Close</button>
+    </div>
+    <div class="modal-body">
+      <pre id="exportPreview"></pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="copyExport()">Copy to Clipboard</button>
+      <button class="btn btn-primary" onclick="downloadExport(); hideExport();">Download .md</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SCREENS = [
+  {
+    id: "homepage",
+    name: "Homepage",
+    route: "/",
+    description: "Hero section, featured bean carousel, full catalog with tag filters, article modal. The main entry point and discovery surface.",
+    elements: ["Hero banner", "Featured carousel", "Bean cards grid", "Tag filter pills", "Article modal", "Add-to-cart toast"]
+  },
+  {
+    id: "bean-detail",
+    name: "Bean Detail",
+    route: "/beans/[id]",
+    description: "Individual bean page with cupping scores, radar chart, similar beans, diary controls, add-to-cart, and linked shops.",
+    elements: ["Score radar chart", "10 cupping score fields", "Similar bean cards", "Diary status control", "Add-to-cart button", "Linked shops"]
+  },
+  {
+    id: "brew-guide",
+    name: "Brew Guide",
+    route: "/brew-guide",
+    description: "Grid of brewing method cards (pour-over, French press, AeroPress, etc.) with difficulty badges and quick stats.",
+    elements: ["Method cards grid", "Difficulty badges", "Brew time pills", "Grind size pills", "Intro copy"]
+  },
+  {
+    id: "brew-method-detail",
+    name: "Brew Method Detail",
+    route: "/brew-guide/[id]",
+    description: "Step-by-step brewing instructions with parameters grid, equipment list, and best-for / flavor-impact cards.",
+    elements: ["Parameter grid", "Equipment pills", "Numbered steps", "Best-for card", "Flavor impact card", "Back link"]
+  },
+  {
+    id: "diary",
+    name: "Coffee Diary",
+    route: "/diary",
+    description: "Personal coffee journal showing beans with diary status (Want to Try / Tried / Loved), notes, and filtering.",
+    elements: ["Status filter tabs", "Bean diary entries", "Notes field", "Status toggles", "Empty state"]
+  },
+  {
+    id: "quiz",
+    name: "Flavor Profile Quiz",
+    route: "/quiz",
+    description: "Multi-step quiz to discover your coffee personality. Generates a flavor profile with bean recommendations.",
+    elements: ["Question cards", "Answer options", "Progress indicator", "Results summary", "Recommended beans"]
+  },
+  {
+    id: "shops",
+    name: "Coffee Shops",
+    route: "/shops",
+    description: "Browse and search specialty coffee shops. Filter by location, view ratings, and explore shop details.",
+    elements: ["Shop cards", "Search / filter", "Location info", "Rating display"]
+  },
+  {
+    id: "shop-detail",
+    name: "Shop Detail",
+    route: "/shops/[id]",
+    description: "Individual shop page with header card, Google Maps link, and a grid of beans sold at that shop.",
+    elements: ["Shop header card", "Maps link", "Bean cards grid", "Breadcrumb nav"]
+  },
+  {
+    id: "social",
+    name: "Social Feed",
+    route: "/social",
+    description: "Community feed showing what other coffee enthusiasts are brewing, tasting, and sharing.",
+    elements: ["Feed posts", "User avatars", "Bean references", "Interaction controls"]
+  },
+  {
+    id: "checkout",
+    name: "Checkout",
+    route: "/checkout",
+    description: "Order flow for purchasing beans. Cart summary, shipping info, and payment.",
+    elements: ["Cart summary", "Shipping form", "Payment fields", "Order total", "Place order CTA"]
+  },
+  {
+    id: "orders",
+    name: "Order History",
+    route: "/orders",
+    description: "View past orders with status, items, and tracking info.",
+    elements: ["Order list", "Order status badges", "Item details", "Tracking info"]
+  },
+  {
+    id: "profile",
+    name: "Profile",
+    route: "/profile",
+    description: "User profile with badges, stats, coffee preferences, and tasting history summary.",
+    elements: ["Profile header", "Badge collection", "Stats grid", "Preference summary"]
+  }
+];
+
+const HEURISTICS = [
+  { id: "visibility", short: "Visibility", full: "Does the screen show system status? Loading states, confirmations, progress indicators." },
+  { id: "match", short: "Real-world match", full: "Does it use language coffee drinkers understand, not developer jargon?" },
+  { id: "control", short: "User control", full: "Can users undo, go back, or change their mind easily?" },
+  { id: "consistency", short: "Consistency", full: "Does it match patterns used on other screens? Same card styles, CTA language, navigation?" },
+  { id: "prevention", short: "Error prevention", full: "Are destructive actions confirmed? Inputs validated? Mistakes prevented before they happen?" },
+  { id: "recognition", short: "Recognition over recall", full: "Can users see their options without remembering? Filter states visible? Progress shown?" },
+  { id: "flexibility", short: "Flexibility", full: "Can beginners and power users both get things done efficiently?" },
+  { id: "minimalism", short: "Minimalist design", full: "Does every element serve a purpose? Clear hierarchy? No visual clutter?" },
+  { id: "recovery", short: "Error recovery", full: "When things go wrong, are error messages helpful? Do they explain what to do next?" },
+  { id: "help", short: "Help & docs", full: "Are complex features explained? Tooltips on technical terms? Obvious way to learn more?" }
+];
+
+const SKILLS = ["Designer", "Copywriter", "QA Reviewer", "Researcher", "UX Researcher"];
+const SEVERITIES = ["No issues", "Minor", "Major", "Critical"];
+
+// State
+let state = {};
+
+function initState() {
+  const saved = getSavedState();
+  if (saved) {
+    state = saved;
+    return;
+  }
+  state = {
+    reviewerName: "",
+    screens: {}
+  };
+  SCREENS.forEach(s => {
+    state.screens[s.id] = {
+      heuristics: {},
+      severity: null,
+      skills: [],
+      notes: "",
+      impression: ""
+    };
+  });
+}
+
+function getSavedState() {
+  try {
+    const raw = sessionStorage.getItem('design-review-state');
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function saveState() {
+  state.reviewerName = document.getElementById('reviewerName').value;
+  try { sessionStorage.setItem('design-review-state', JSON.stringify(state)); } catch {}
+  updateStats();
+  updateNav();
+}
+
+// Render
+function render() {
+  const container = document.getElementById('screenCards');
+  const nav = document.getElementById('screenNav');
+  let cardsHtml = '';
+  let navHtml = '';
+
+  SCREENS.forEach((screen, idx) => {
+    const fb = state.screens[screen.id];
+    const hasFeedback = fb.notes || fb.impression || fb.severity || Object.values(fb.heuristics).some(Boolean);
+
+    cardsHtml += `
+      <div class="screen-card ${hasFeedback ? 'has-feedback' : ''}" id="screen-${screen.id}">
+        <div class="screen-header">
+          <div class="screen-header-left">
+            <span class="route">${screen.route}</span>
+            <h3>${screen.name}</h3>
+            <p class="description">${screen.description}</p>
+          </div>
+          <div class="screen-number">${String(idx + 1).padStart(2, '0')}</div>
+        </div>
+
+        <div class="elements-list">
+          <div class="elements-label">Key elements to review</div>
+          <div class="elements-pills">
+            ${screen.elements.map(e => `<span class="element-pill">${e}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="feedback-form">
+          <div class="feedback-section">
+            <div class="feedback-section-title">First impression</div>
+            <textarea
+              class="feedback-textarea"
+              placeholder="Open the app at ${screen.route} — what's your gut reaction? What works, what feels off?"
+              oninput="updateField('${screen.id}', 'impression', this.value)"
+              style="min-height:60px"
+            >${fb.impression || ''}</textarea>
+          </div>
+
+          <div class="feedback-section">
+            <div class="feedback-section-title">Heuristic flags — check any that feel violated</div>
+            <div class="heuristic-grid">
+              ${HEURISTICS.map(h => `
+                <label class="heuristic-item ${fb.heuristics[h.id] ? 'flagged' : ''}">
+                  <input type="checkbox"
+                    ${fb.heuristics[h.id] ? 'checked' : ''}
+                    onchange="toggleHeuristic('${screen.id}', '${h.id}', this.checked, this.closest('.heuristic-item'))"
+                  >
+                  <div class="heuristic-label">
+                    <strong>${h.short}</strong><br>
+                    <span>${h.full}</span>
+                  </div>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="feedback-section-title">Overall severity</div>
+            <div class="severity-options">
+              ${SEVERITIES.map(sev => `
+                <button
+                  class="severity-btn ${fb.severity === sev ? 'selected-' + sev.toLowerCase().replace(' ', '') : ''}"
+                  onclick="setSeverity('${screen.id}', '${sev}', this)"
+                >${sev === 'No issues' ? '✓ ' : ''}${sev}</button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="feedback-section-title">Route to skill</div>
+            <div class="route-chips">
+              ${SKILLS.map(skill => `
+                <button
+                  class="route-chip ${fb.skills.includes(skill) ? 'selected' : ''}"
+                  onclick="toggleSkill('${screen.id}', '${skill}', this)"
+                >${skill}</button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="feedback-section-title">Detailed notes</div>
+            <textarea
+              class="feedback-textarea"
+              placeholder="Specific issues, suggestions, or observations. Be concrete — 'the score badges don't explain what 8.42 means' is better than 'confusing scores'."
+              oninput="updateField('${screen.id}', 'notes', this.value)"
+            >${fb.notes || ''}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+
+    navHtml += `<a href="#screen-${screen.id}" class="${hasFeedback ? 'has-feedback' : ''}" id="nav-${screen.id}"><span class="tooltip">${screen.name}</span></a>`;
+  });
+
+  container.innerHTML = cardsHtml;
+  nav.innerHTML = navHtml;
+  document.getElementById('reviewerName').value = state.reviewerName || '';
+  document.getElementById('totalScreens').textContent = SCREENS.length;
+  updateStats();
+}
+
+// Interactions
+function toggleHeuristic(screenId, heuristicId, checked, el) {
+  state.screens[screenId].heuristics[heuristicId] = checked;
+  if (el) el.classList.toggle('flagged', checked);
+  saveState();
+}
+
+function setSeverity(screenId, severity, btn) {
+  const fb = state.screens[screenId];
+  if (fb.severity === severity) {
+    fb.severity = null;
+    btn.className = 'severity-btn';
+  } else {
+    fb.severity = severity;
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.severity-btn').forEach(b => b.className = 'severity-btn');
+    btn.className = 'severity-btn selected-' + severity.toLowerCase().replace(' ', '');
+  }
+  saveState();
+}
+
+function toggleSkill(screenId, skill, btn) {
+  const skills = state.screens[screenId].skills;
+  const idx = skills.indexOf(skill);
+  if (idx > -1) {
+    skills.splice(idx, 1);
+    btn.classList.remove('selected');
+  } else {
+    skills.push(skill);
+    btn.classList.add('selected');
+  }
+  saveState();
+}
+
+function updateField(screenId, field, value) {
+  state.screens[screenId][field] = value;
+  saveState();
+}
+
+function updateStats() {
+  let reviewed = 0;
+  let issues = 0;
+  let critical = 0;
+
+  SCREENS.forEach(s => {
+    const fb = state.screens[s.id];
+    const hasFeedback = fb.notes || fb.impression || fb.severity || Object.values(fb.heuristics).some(Boolean);
+    if (hasFeedback) reviewed++;
+    const flagged = Object.values(fb.heuristics).filter(Boolean).length;
+    issues += flagged;
+    if (fb.severity === 'Critical') critical++;
+  });
+
+  document.getElementById('reviewedCount').textContent = reviewed;
+  document.getElementById('issueCount').textContent = issues;
+  document.getElementById('criticalCount').textContent = critical;
+
+  const pct = SCREENS.length > 0 ? (reviewed / SCREENS.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function updateNav() {
+  SCREENS.forEach(s => {
+    const fb = state.screens[s.id];
+    const hasFeedback = fb.notes || fb.impression || fb.severity || Object.values(fb.heuristics).some(Boolean);
+    const navEl = document.getElementById('nav-' + s.id);
+    if (navEl) navEl.classList.toggle('has-feedback', hasFeedback);
+    const cardEl = document.getElementById('screen-' + s.id);
+    if (cardEl) cardEl.classList.toggle('has-feedback', hasFeedback);
+  });
+}
+
+// Export
+function generateMarkdown() {
+  const reviewer = state.reviewerName || "Anonymous";
+  const date = new Date().toISOString().split('T')[0];
+  let md = `# Design Team Screen Review\n\n`;
+  md += `**Reviewer:** ${reviewer}\n`;
+  md += `**Date:** ${date}\n`;
+  md += `**App:** Coffee App\n\n`;
+  md += `---\n\n`;
+
+  // Summary
+  let reviewed = 0, totalFlags = 0, critCount = 0, majCount = 0, minCount = 0;
+  SCREENS.forEach(s => {
+    const fb = state.screens[s.id];
+    const hasFeedback = fb.notes || fb.impression || fb.severity || Object.values(fb.heuristics).some(Boolean);
+    if (hasFeedback) reviewed++;
+    totalFlags += Object.values(fb.heuristics).filter(Boolean).length;
+    if (fb.severity === 'Critical') critCount++;
+    if (fb.severity === 'Major') majCount++;
+    if (fb.severity === 'Minor') minCount++;
+  });
+
+  md += `## Summary\n\n`;
+  md += `- **Screens reviewed:** ${reviewed} / ${SCREENS.length}\n`;
+  md += `- **Heuristic flags:** ${totalFlags}\n`;
+  md += `- **Critical:** ${critCount} | **Major:** ${majCount} | **Minor:** ${minCount}\n\n`;
+  md += `---\n\n`;
+
+  // Per-screen
+  SCREENS.forEach((screen, idx) => {
+    const fb = state.screens[screen.id];
+    const hasFeedback = fb.notes || fb.impression || fb.severity || Object.values(fb.heuristics).some(Boolean);
+    if (!hasFeedback) return;
+
+    md += `## ${idx + 1}. ${screen.name} (\`${screen.route}\`)\n\n`;
+
+    if (fb.severity) md += `**Severity:** ${fb.severity}\n\n`;
+    if (fb.skills.length) md += `**Route to:** ${fb.skills.map(s => '→ ' + s.toLowerCase()).join(', ')}\n\n`;
+
+    if (fb.impression) {
+      md += `### First impression\n\n${fb.impression}\n\n`;
+    }
+
+    const flagged = HEURISTICS.filter(h => fb.heuristics[h.id]);
+    if (flagged.length) {
+      md += `### Heuristic flags\n\n`;
+      flagged.forEach(h => {
+        md += `- **${h.short}:** ${h.full}\n`;
+      });
+      md += `\n`;
+    }
+
+    if (fb.notes) {
+      md += `### Detailed notes\n\n${fb.notes}\n\n`;
+    }
+
+    md += `---\n\n`;
+  });
+
+  return md;
+}
+
+function showExport() {
+  document.getElementById('exportPreview').textContent = generateMarkdown();
+  document.getElementById('exportModal').classList.add('visible');
+}
+
+function hideExport() {
+  document.getElementById('exportModal').classList.remove('visible');
+}
+
+function downloadExport() {
+  const md = generateMarkdown();
+  const reviewer = (state.reviewerName || 'anonymous').toLowerCase().replace(/\s+/g, '-');
+  const date = new Date().toISOString().split('T')[0];
+  const filename = `design-review-${reviewer}-${date}.md`;
+
+  const blob = new Blob([md], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Feedback exported as ' + filename);
+}
+
+function copyExport() {
+  const md = generateMarkdown();
+  navigator.clipboard.writeText(md).then(() => showToast('Copied to clipboard'));
+}
+
+function clearAll() {
+  if (!confirm('Clear all feedback? This cannot be undone.')) return;
+  try { sessionStorage.removeItem('design-review-state'); } catch {}
+  state = {};
+  initState();
+  render();
+  showToast('All feedback cleared');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 3000);
+}
+
+// Scroll-based nav highlighting
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const scrollY = window.scrollY + 200;
+      let active = SCREENS[0].id;
+      SCREENS.forEach(s => {
+        const el = document.getElementById('screen-' + s.id);
+        if (el && el.offsetTop <= scrollY) active = s.id;
+      });
+      document.querySelectorAll('.screen-nav a').forEach(a => a.classList.remove('active'));
+      const navEl = document.getElementById('nav-' + active);
+      if (navEl) navEl.classList.add('active');
+      ticking = false;
+    });
+    ticking = true;
+  }
+});
+
+// Init
+initState();
+render();
+</script>
+
+</body>
+</html>

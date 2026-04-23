@@ -76,6 +76,25 @@ The app has extensive research data in the `references/` directory:
 - `references/usability-sessions/` — 5 full moderated usability session transcripts (Sarah K., Marcus T., Priya M., Devon R., Lisa Chen) with task-by-task observations
 - `references/interviews/` — 3 semi-structured interview transcripts (Jordan W., Rachel S., Tom H.) exploring coffee habits, app expectations, and feature wishlists
 - `references/ux-research-data.xlsx` — Quantitative data with 5 sheets: Task Completion (25 task attempts with timing/errors), SUS Scores (System Usability Scale), Error & Friction Log (15 coded errors), Coded Themes (15 themes with frequency/severity), and NPS & Satisfaction scores
+- `references/design-reviews/` — Design team screen walkthrough feedback, exported from the review tool (`design-review.html` in the project root). Each file is a structured markdown report from a team member covering every screen, with heuristic flags, severity ratings, and skill routing.
+
+### Design team walkthrough feedback
+
+The design review tool (`design-review.html`) lets team members walk through the app screen by screen and provide structured feedback aligned to the same 10 heuristics used in this skill. Each review exports as a markdown file with:
+
+- Per-screen first impressions
+- Heuristic flags (which of the 10 heuristics feel violated)
+- Severity rating (None / Minor / Major / Critical)
+- Skill routing (→ designer, → copywriter, → qa reviewer, etc.)
+- Detailed notes with specific observations
+
+When synthesizing design review feedback:
+
+1. Read all review files in `references/design-reviews/` — each reviewer brings a different perspective
+2. Look for convergence — if 3/4 reviewers flag the same heuristic on the same screen, that's a strong signal
+3. Cross-reference with usability session data — do design team concerns match real user struggles?
+4. Weight severity by how many reviewers independently flagged it, not just the highest severity any one person assigned
+5. Track which screens got "No issues" from everyone — those are your bright spots worth preserving
 
 When synthesizing feedback:
 
