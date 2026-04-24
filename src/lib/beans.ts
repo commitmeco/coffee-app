@@ -1,5 +1,6 @@
 import beansData from "@/data/beans.json";
 import curatedData from "@/data/beans_curated.json";
+import { generatePrice, assignRoastLevel, assignRoaster, isInStock } from "./pricing";
 
 export interface Bean {
   id: number;
@@ -31,10 +32,27 @@ export interface Bean {
     category_one: number;
     category_two: number;
   };
+  // Enriched fields (generated at load time)
+  price: number;
+  roaster: string;
+  roast_level: "Light" | "Medium" | "Dark";
+  in_stock: boolean;
 }
 
-const beans: Bean[] = beansData as Bean[];
-const curated: Bean[] = curatedData as Bean[];
+// Enrich raw JSON data with generated pricing fields
+function enrichBean(raw: Omit<Bean, "price" | "roaster" | "roast_level" | "in_stock">): Bean {
+  const partial = raw as Bean;
+  return {
+    ...partial,
+    price: generatePrice(partial),
+    roaster: assignRoaster(partial),
+    roast_level: assignRoastLevel(partial),
+    in_stock: isInStock(partial),
+  };
+}
+
+const beans: Bean[] = (beansData as Omit<Bean, "price" | "roaster" | "roast_level" | "in_stock">[]).map(enrichBean);
+const curated: Bean[] = (curatedData as Omit<Bean, "price" | "roaster" | "roast_level" | "in_stock">[]).map(enrichBean);
 
 // ── Core Data Access ──
 

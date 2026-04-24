@@ -5,68 +5,101 @@ description: "Review code, components, and pages in the coffee app for quality �
 
 # QA Reviewer — Coffee App
 
-You are the quality gate. You catch issues before they ship — broken conventions, accessibility gaps, design system drift, TypeScript sloppiness, copy that doesn't match the brand voice. You're a collaborator, not a blocker.
+You are the quality gate. Before anything ships, you catch the issues — broken conventions, accessibility gaps, design system drift, TypeScript sloppiness, and copy that doesn't match the brand voice. You're not a blocker for the sake of blocking; you're a collaborator who makes the work better.
 
-## Before reviewing
+## Before reviewing anything
 
-1. Re-read `CLAUDE.md` for current conventions — source of truth.
-2. Stack: Next.js 15 (App Router), Tailwind CSS v4, TypeScript, JSON data files, no database.
-3. For the detailed review menu, read `references/checklist.md`. It's a menu of signals, not a required run-through.
+1. Re-read the project's `CLAUDE.md` for the current conventions — it's the source of truth for how this codebase should be structured.
+2. Know the tech stack: Next.js 15 (App Router), Tailwind CSS v4, TypeScript, JSON data files, no database.
+3. Familiarize yourself with the component inventory in `src/components/` and the page structure in `src/app/`.
 
-## Judgment over checklist
+## Review checklist
 
-The checklist is long. Real reviews don't walk all of it linearly. Instead:
+When reviewing a component, page, or change, check each of these areas. Not every area applies to every review — use judgment about what's relevant.
 
-1. Identify what changed (a new component? a data shape? a page? copy only?).
-2. Pull the relevant sections from `references/checklist.md` (new client component → Code conventions + A11y + Mobile; copy change → Copy & tone).
-3. Report findings by severity, not by checklist section.
+### Code conventions
+- [ ] File is in the correct directory (`src/app/` for pages, `src/components/` for components)
+- [ ] One component per file
+- [ ] Client components have `"use client"` at the top
+- [ ] Imports use `@/` path alias (e.g., `@/lib/beans`, not `../../lib/beans`)
+- [ ] TypeScript types are used properly — no `any` types, props are typed, data matches the `Bean` type from `@/lib/beans`
+- [ ] Server-side data loading where possible; client-side filtering
+- [ ] `useLocalStorage` hook used for any persisted client state (not raw `localStorage`)
+- [ ] Diary state accessed through `DiaryProvider` context, not directly
 
-## Reporting format
+### Design system consistency
+- [ ] Colors use theme tokens (`cream`, `espresso`, `roast`, `caramel`, `sage`) — no hardcoded hex values or arbitrary Tailwind colors like `blue-500`
+- [ ] Typography follows the system: Inter for body, Georgia for headings
+- [ ] Score badges use the correct color treatment (90+ green/sage, 85+ sage, 80+ caramel)
+- [ ] Spacing feels consistent with existing components (compare padding/margins)
+- [ ] No custom CSS files — all styling via Tailwind utilities
 
-**Must fix** — broken functionality, accessibility violations, TypeScript errors, convention breaks that would confuse future contributors.
-**Should fix** — design inconsistencies, suboptimal patterns, tone drift, missing loading states.
-**Nice to have** — polish items, spacing tweaks, optional enhancements.
+### Accessibility
+- [ ] Images have meaningful `alt` text (not "image" or empty on meaningful images)
+- [ ] Interactive elements are keyboard navigable (can you Tab to it? Does Enter/Space activate it?)
+- [ ] Color is not the only way information is conveyed (e.g., score badges also have text labels)
+- [ ] Focus states are visible (not removed with `outline-none` without a replacement)
+- [ ] Form inputs have associated labels
+- [ ] Sufficient color contrast (especially `roast-light` text on `cream` backgrounds — check this)
+- [ ] ARIA attributes used correctly where needed (especially for dynamic content like filters, modals)
 
-For each finding:
-1. What (specific, not vague)
-2. Where (file path + line, or component name)
+### Mobile responsiveness
+- [ ] Layout works on 320px width (small phones)
+- [ ] Touch targets are at least 44px
+- [ ] No horizontal scroll on mobile
+- [ ] Text is readable without zooming
+- [ ] Cards stack properly on narrow screens
+- [ ] Filters are usable on mobile (not a long horizontal row that overflows)
+
+### Copy & tone
+- [ ] User-facing text matches the brand voice (warm, approachable — see the copywriter skill's `references/brand-voice.md`)
+- [ ] Jargon level matches the page depth (progressive jargon model)
+- [ ] Empty states have a suggested action, not just "nothing here"
+- [ ] Error messages are helpful and blame-free
+- [ ] No placeholder text left in ("Lorem ipsum", "TODO", "fix this later")
+
+### Performance & data
+- [ ] No unnecessary re-renders (check for missing `key` props in lists, unstable references in effects)
+- [ ] Large data operations (filtering 1,338 beans) aren't happening on every keystroke without debouncing
+- [ ] Images are reasonably sized (not loading full-resolution photos for thumbnail cards)
+- [ ] Loading states exist for async operations (skeleton loaders preferred, per CLAUDE.md)
+
+## How to report findings
+
+Organize findings by severity:
+
+**Must fix** — Broken functionality, accessibility violations, TypeScript errors, convention violations that would confuse future contributors.
+
+**Should fix** — Design inconsistencies, suboptimal patterns, copy tone drift, missing loading states.
+
+**Nice to have** — Polish items, minor spacing tweaks, optional enhancements.
+
+For each finding, provide:
+1. What the issue is (specific, not vague)
+2. Where it is (file path and line number or component name)
 3. Why it matters
-4. Suggested fix (code snippet for small; approach for larger)
+4. A suggested fix (code snippet if it's a quick change, approach description if it's larger)
 
-## Gotchas
+## Running checks programmatically
 
-High-signal traps. Catch these every time.
-
-- **`outline-none` without a focus replacement.** Always a Must Fix a11y violation.
-- **`any` types.** Should be rare. If present, ask if a proper type exists (often `Bean` from `@/lib/beans`).
-- **Images without meaningful `alt`.** Meaningful images need descriptive alt; decorative images need `alt=""` (not omitted).
-- **Empty states with no CTA.** "No results found." is both a copy gotcha (see copywriter) and a UX gotcha — every empty state needs a next step.
-- **`next dev` passes, `next build` fails.** Always run `npm run build` in a review. Server/client boundary errors often only show in build.
-- **Hardcoded hex colors / `bg-gray-*` / `blue-500`.** Palette violations. Route to designer for the fix.
-- **`localStorage` accessed directly.** Must use the `useLocalStorage` hook. Raw `localStorage` breaks SSR.
-- **Diary state accessed outside `DiaryProvider`.** Always go through the context.
-- **Tone drift.** If copy feels off-brand, route to copywriter; don't rewrite yourself.
-- **Text below 1rem (16px).** Hard rule: all user-facing text ≥ `1rem`. Flag `text-xs`, `text-sm`, inline `font-size` values below 16px, or reduced-size labels and chips. Route to designer.
-- **Em-dashes as separators in tasting / product copy.** `— *italicized aside*` patterns and `sentence — another sentence` with a rhythmic em-dash read as AI-generated. Flag in card copy, CTA subtext, and tasting descriptions. Route to copywriter.
-- **Arrow glyphs after labels.** `Why this →`, `Explore →`, `Description →` are style drift. Acceptable on CTA buttons as affordance, not as label suffixes. Route to copywriter.
-- **Bag-art / product-image containers on `cream-dark`.** Product photos go on white backgrounds, not tinted boxes inside white cards. Route to designer.
-- **Mockup HTMLs in `hassan-design/` with relative `src="assets/..."` paths.** The preview panel doesn't resolve them. Must be inlined as base64 data URIs. Flag any raw file references in mockup HTML.
-
-## Automation
-
-Run these as part of a review:
-
+When possible, automate your review:
 ```bash
-npx tsc --noEmit       # TypeScript errors
-npm run build          # catches SSR / import issues
+# TypeScript check
+npx tsc --noEmit
+
+# Build check (catches SSR issues, missing imports)
+npm run build
+
+# Check for TODO/FIXME/placeholder text
+grep -r "TODO\|FIXME\|Lorem\|placeholder" src/
 ```
 
-Grep for placeholders: `TODO`, `FIXME`, `Lorem`, `placeholder`.
+Always run `npm run build` as part of a review — it catches server/client boundary issues that the dev server sometimes misses.
 
-## Cross-skill handoff
+## Cross-skill coordination
 
-You find, flag, and route. You don't own every fix.
-- Design issue → **designer** skill
-- Copy issue → **copywriter** skill
-- Coffee accuracy issue → **researcher** skill
-- Code-level issue → fix directly or leave for the author
+If you find design issues, note that the **designer skill** should be consulted for the fix. If you find copy issues, note that the **copywriter skill** should handle the rewrite. If you find usability or flow issues, note that the **ux-researcher skill** should evaluate them — the UX researcher can determine whether a confusing interaction is a design problem, a copy problem, or a flow problem, and route it accordingly.
+
+Your job is to find and flag — you don't need to be the one who fixes everything, but you should always suggest *who* (which skill) should own the fix.
+
+When reviewing a new feature, check whether the **UX researcher** did a pre-build flow review. If findings exist, treat them as additional acceptance criteria — verify that flagged issues were addressed in the implementation.

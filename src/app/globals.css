@@ -1,22 +1,139 @@
 @import "tailwindcss";
 
+/* ── One More Cup Magazine Custom Classes ── */
+
+/* ── Barista Chat — Steam Animation ── */
+@keyframes omc-steam-wisp {
+  0%   { transform: translateY(0px)   scaleX(1);   opacity: 0; }
+  12%  { opacity: 0.75; }
+  50%  { transform: translateY(-28px) scaleX(1.25); opacity: 0.45; }
+  88%  { opacity: 0.1; }
+  100% { transform: translateY(-58px) scaleX(0.85); opacity: 0; }
+}
+@keyframes omc-steam-wisp-b {
+  0%   { transform: translateY(0px)   scaleX(1);   opacity: 0; }
+  12%  { opacity: 0.65; }
+  50%  { transform: translateY(-22px) scaleX(0.8); opacity: 0.35; }
+  88%  { opacity: 0.08; }
+  100% { transform: translateY(-50px) scaleX(1.15); opacity: 0; }
+}
+.omc-steam-1 { animation: omc-steam-wisp   2.4s ease-in-out infinite; }
+.omc-steam-2 { animation: omc-steam-wisp-b 2.4s ease-in-out infinite 0.5s; }
+.omc-steam-3 { animation: omc-steam-wisp   2.4s ease-in-out infinite 1.0s; }
+.omc-steam-4 { animation: omc-steam-wisp-b 2.4s ease-in-out infinite 1.5s; }
+
+/* Chat window slide-up */
+@keyframes omc-chat-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.omc-chat-in { animation: omc-chat-in 0.28s cubic-bezier(0.34,1.26,0.64,1) both; }
+
+/* Typing dots */
+@keyframes omc-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+  40%            { transform: translateY(-5px); opacity: 1; }
+}
+.omc-dot-1 { animation: omc-dot-bounce 1.2s ease-in-out infinite 0.0s; }
+.omc-dot-2 { animation: omc-dot-bounce 1.2s ease-in-out infinite 0.2s; }
+.omc-dot-3 { animation: omc-dot-bounce 1.2s ease-in-out infinite 0.4s; }
+
+/* Chip pop-in */
+@keyframes omc-chip-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.92); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+.omc-chip-in { animation: omc-chip-in 0.22s cubic-bezier(0.34,1.4,0.64,1) both; }
+
+/* Brew cup pulse */
+@keyframes omc-brew-pulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(255,92,26,0.4)); }
+  50%       { transform: scale(1.04); filter: drop-shadow(0 0 18px rgba(255,92,26,0.7)); }
+}
+.omc-brew-pulse { animation: omc-brew-pulse 2s ease-in-out infinite; }
+
+/* Message slide-in */
+@keyframes omc-msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.omc-msg-in { animation: omc-msg-in 0.25s ease both; }
+
+
+
+/* Ticker */
+@keyframes omc-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.omc-ticker-inner { animation: omc-ticker 28s linear infinite; }
+
+/* Fade-up for hero */
+@keyframes omc-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.omc-fade-1 { animation: omc-fade-up 0.6s 0.0s ease both; }
+.omc-fade-2 { animation: omc-fade-up 0.6s 0.1s ease both; }
+.omc-fade-3 { animation: omc-fade-up 0.6s 0.2s ease both; }
+.omc-fade-4 { animation: omc-fade-up 0.6s 0.3s ease both; }
+.omc-fade-5 { animation: omc-fade-up 0.6s 0.4s ease both; }
+.omc-fade-6 { animation: omc-fade-up 0.6s 0.5s ease both; }
+
+/* Hero zoom */
+@keyframes omc-hero-zoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+.omc-hero-zoom { animation: omc-hero-zoom 8s ease-out both; }
+
+/* Modal in */
+@keyframes omc-modal-in {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.omc-modal-in { animation: omc-modal-in 0.3s ease both; }
+
+/* Card hover lift */
+.omc-card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.omc-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(10,8,4,0.18);
+}
+
+/* Scroll reveal */
+.omc-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.omc-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @theme {
-  /* Coffee-inspired color palette */
-  --color-cream: #FFF8F0;
-  --color-cream-dark: #F5EDE3;
-  --color-espresso: #2C1810;
-  --color-espresso-light: #4A3228;
-  --color-roast: #6B3A2A;
-  --color-roast-light: #8B5E3C;
-  --color-caramel: #C4813D;
-  --color-caramel-light: #D4A574;
-  --color-honey: #E8B960;
-  --color-sage: #7A8B6F;
-  --color-sage-light: #A3B299;
+  /* Grounds & Glory warm cream palette */
+  --color-cream: #F7F3EE;
+  --color-cream-light: #EDE8E1;
+  --color-paper: #FDFAF6;
+  --color-espresso: #3B2C23;
+  --color-espresso-light: #5E4630;
+  --color-roast: #7A5F4E;
+  --color-roast-light: #8C7C6C;
+  --color-caramel: #D6A763;
+  --color-caramel-light: #DEBB6D;
+  --color-honey: #F0C256;
+  --color-sage: #85A88D;
+  --color-sage-light: #A5C9AE;
+  --color-border: #EDE8E1;
+  --color-surface: #FFFFFF;
 
   /* Typography */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, serif;
+  --font-serif: var(--font-fraunces), Georgia, ui-serif, serif;
 }
 
 /* ── Base ── */
@@ -49,11 +166,11 @@ a, button, input, select {
 /* ── Score Badge Colors ── */
 
 .score-outstanding {
-  background-color: #065f46;
+  background-color: var(--color-sage);
   color: white;
 }
 .score-excellent {
-  background-color: var(--color-sage);
+  background-color: var(--color-sage-light);
   color: white;
 }
 .score-very-good {
@@ -147,9 +264,40 @@ a, button, input, select {
 /* ── Skeleton Loading ── */
 
 .skeleton {
-  background: linear-gradient(90deg, var(--color-cream-dark) 25%, var(--color-cream) 50%, var(--color-cream-dark) 75%);
+  background: linear-gradient(90deg, var(--color-cream-light) 25%, rgba(255,255,255,0.6) 50%, var(--color-cream-light) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 0.5rem;
 }
 
+/* ── Quiz Animations ── */
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes select-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes dot-pulse {
+  0%, 80%, 100% { opacity: 0.3; }
+  40% { opacity: 1; }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+.animate-select-pop {
+  animation: select-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dot-pulse span {
+  animation: dot-pulse 1.4s infinite;
+}
+.dot-pulse span:nth-child(2) { animation-delay: 0.2s; }
+.dot-pulse span:nth-child(3) { animation-delay: 0.4s; }

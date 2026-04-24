@@ -1,0 +1,82 @@
+[
+  {
+    "id": "first-sip",
+    "name": "First Sip",
+    "description": "Log your first bean to the diary",
+    "icon": "🌱",
+    "category": "exploration",
+    "requirement": { "type": "diary_count", "count": 1 }
+  },
+  {
+    "id": "diary-devotee",
+    "name": "Diary Devotee",
+    "description": "Log 10 beans to your diary",
+    "icon": "📓",
+    "category": "tasting",
+    "requirement": { "type": "diary_count", "count": 10 }
+  },
+  {
+    "id": "globe-trotter",
+    "name": "Globe Trotter",
+    "description": "Try beans from 5 different countries",
+    "icon": "🌍",
+    "category": "exploration",
+    "requirement": { "type": "countries", "count": 5 }
+  },
+  {
+    "id": "score-chaser",
+    "name": "Score Chaser",
+    "description": "Try a bean scoring 90 or above",
+    "icon": "🏆",
+    "category": "tasting",
+    "requirement": { "type": "high_score", "count": 90 }
+  },
+  {
+    "id": "flavor-scholar",
+    "name": "Flavor Scholar",
+    "description": "Complete the flavor profile quiz",
+    "icon": "🎓",
+    "category": "exploration",
+    "requirement": { "type": "quiz_complete", "count": 1 }
+  },
+  {
+    "id": "shopping-spree",
+    "name": "Shopping Spree",
+    "description": "Place your first order",
+    "icon": "🛒",
+    "category": "shopping",
+    "requirement": { "type": "order_count", "count": 1 }
+  },
+  {
+    "id": "process-pro",
+    "name": "Process Pro",
+    "description": "Try 3 different processing methods",
+    "icon": "⚙️",
+    "category": "tasting",
+    "requirement": { "type": "processing_methods", "count": 3 }
+  },
+  {
+    "id": "high-altitude",
+    "name": "High Altitude",
+    "description": "Try a bean from above 2000m",
+    "icon": "🏔️",
+    "category": "exploration",
+    "requirement": { "type": "altitude", "count": 2000 }
+  },
+  {
+    "id": "critic",
+    "name": "Coffee Critic",
+    "description": "Rate 5 beans with star ratings",
+    "icon": "⭐",
+    "category": "social",
+    "requirement": { "type": "ratings_count", "count": 5 }
+  },
+  {
+    "id": "bean-lover",
+    "name": "Bean Lover",
+    "description": "Mark 3 beans as loved",
+    "icon": "❤️",
+    "category": "tasting",
+    "requirement": { "type": "loved_count", "count": 3 }
+  }
+]

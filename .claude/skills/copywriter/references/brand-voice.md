@@ -34,32 +34,13 @@ Copy depth should match page depth in the app:
 - Don't use "amazing" or "incredible" (the hero currently says "Amazing Coffee" — that's on the list to fix)
 - Don't write marketing fluff with no substance ("elevate your coffee experience")
 - Don't assume gender, dietary preferences, or brewing equipment
-- Don't use em-dashes as sentence separators in tasting notes, CTAs, or card copy. Periods and commas. Italicized em-dash asides (`flavor — *taste like this*`) read as AI-generated; rewrite as a second sentence.
-- Don't put arrow glyphs after labels (`Why this →`, `Explore →`). Use a colon or drop the decoration. Arrows on CTA buttons as action affordance are fine.
 
 ## Flavor Description Patterns
-When describing a bean's flavor profile, lead with the sensory experience, not the score. Anchor every tasting term to a familiar taste the reader has had.
+When describing a bean's flavor profile, lead with the sensory experience, not the score:
 
-**Good:** "This Ethiopian natural tastes like biting into a ripe blueberry. Sweet, a little winey, with a cocoa finish."
+**Good:** "This Ethiopian natural tastes like biting into a ripe blueberry — sweet, a little winey, with a cocoa finish."
 
 **Avoid:** "Scoring 87.42, this lot exhibits prominent fruity notes with satisfactory acidity."
-
-### Anchoring pattern
-
-SCA flavor-wheel terms mean little to most people. Translate them to something the reader has eaten or drunk.
-
-| Jargon term | Plain anchor |
-|---|---|
-| Stone fruit | Ripe apricot or plum |
-| Bergamot | Earl Grey tea |
-| Bright citrus | Orange zest, not lemon-sour |
-| Floral | A perfume in the cup — jasmine tea, not lavender soap |
-| Winey | A red-wine ferment, fruit with some edge |
-| Bittersweet chocolate | 70% dark, not milk, not baking cocoa |
-| Caramel | Burnt sugar sweetness in the finish |
-| Blueberry | Jammy and slightly tart — think real blueberries, fresh; dried fruit at stale ages |
-
-Use these as a starting library; add to this table when a new jargon term comes up in writing.
 
 ## Page-Specific Voice Notes
 
@@ -79,21 +60,3 @@ Intimate and reflective. This is the user's personal space. Copy should be quiet
 Always empathetic, never blame the user. Offer a clear next step.
 - "No beans match those filters — try loosening up a bit?" ✓
 - "No results found." ✗
-
-## Myth-Busting (Wedge Content)
-The app has a wedge content strategy: short myth-busting pieces (social + in-app) that pair a sharp headline with an illustrated explainer. These travel light.
-
-- Headline: 3–8 words, contrarian framing. Not clickbait — confidently opposite to the myth.
-- Pair with a Bryan-style illustration (designer owns; see `designer/references/illustration-system.md`). Copy without illustration is half the piece.
-- Body: 1–3 sentences max. Explain once; don't over-teach.
-- No "Did you know" openers.
-
-**Good:** "Light roast ≠ less caffeine." + a warming chart diagram.
-**Avoid:** "Did you know light roast actually has more caffeine than dark?" (long, teacherly)
-
-## Depth Moments
-Punctuated prompts that fire 4–8× per year per user — first espresso pull, brew calibration for a new bean, tool onboarding, seasonal guides. Co-owned: designer builds the illustrated flow, copywriter writes the narrative + CTA, researcher validates coffee accuracy.
-
-- Frame as invitation, not tutorial. "Ready to pull your first shot?" beats "Espresso Brewing Guide."
-- One idea per step. The illustration is the teacher; copy is the companion.
-- Close with the next step named specifically. "Log your first pull" beats "Continue."

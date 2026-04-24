@@ -10,6 +10,7 @@ interface DiaryContextValue {
   getEntry: (beanId: number) => DiaryEntry | undefined;
   setEntry: (beanId: number, status: DiaryStatus, notes: string) => void;
   updateNotes: (beanId: number, notes: string) => void;
+  updateEntry: (beanId: number, updates: Partial<DiaryEntry>) => void;
   removeEntry: (beanId: number) => void;
 }
 
@@ -52,6 +53,17 @@ export function DiaryProvider({ children }: { children: React.ReactNode }) {
     [setEntries]
   );
 
+  const updateEntry = useCallback(
+    (beanId: number, updates: Partial<DiaryEntry>) => {
+      setEntries((prev) => {
+        const existing = prev[beanId];
+        if (!existing) return prev;
+        return { ...prev, [beanId]: { ...existing, ...updates } };
+      });
+    },
+    [setEntries]
+  );
+
   const removeEntry = useCallback(
     (beanId: number) => {
       setEntries((prev) => {
@@ -65,7 +77,7 @@ export function DiaryProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <DiaryContext.Provider
-      value={{ entries, hydrated, getEntry, setEntry, updateNotes, removeEntry }}
+      value={{ entries, hydrated, getEntry, setEntry, updateNotes, updateEntry, removeEntry }}
     >
       {children}
     </DiaryContext.Provider>

@@ -53,7 +53,7 @@ export default function ScoreRadar({ scores }: ScoreRadarProps) {
             key={ring}
             d={ringPath}
             fill="none"
-            stroke="#E8E0D8"
+            stroke="#2A2A2A"
             strokeWidth={ring === 10 ? 1.5 : 0.3}
           />
         );
@@ -69,7 +69,7 @@ export default function ScoreRadar({ scores }: ScoreRadarProps) {
             y1={center}
             x2={x}
             y2={y}
-            stroke="#E8E0D8"
+            stroke="#2A2A2A"
             strokeWidth={0.3}
           />
         );
@@ -78,8 +78,8 @@ export default function ScoreRadar({ scores }: ScoreRadarProps) {
       {/* Data polygon with draw animation */}
       <path
         d={dataPath}
-        fill="rgba(122, 139, 111, 0.2)"
-        stroke="#7A8B6F"
+        fill="rgba(107, 158, 120, 0.15)"
+        stroke="#6B9E78"
         strokeWidth={2.5}
         className={mounted ? "radar-polygon" : "opacity-0"}
       />
@@ -91,8 +91,8 @@ export default function ScoreRadar({ scores }: ScoreRadarProps) {
           cx={p[0]}
           cy={p[1]}
           r={4}
-          fill="#7A8B6F"
-          stroke="white"
+          fill="#6B9E78"
+          stroke="#141414"
           strokeWidth={2}
           className={mounted ? "radar-point" : "opacity-0"}
           style={{ animationDelay: `${0.9 + i * 0.05}s` }}

@@ -1,0 +1,119 @@
+[
+  {
+    "id": "a1",
+    "userName": "Alex Chen",
+    "userAvatar": "🧑‍💻",
+    "userProfile": "The Explorer",
+    "action": "loved",
+    "beanId": 5,
+    "rating": 5,
+    "comment": "This Ethiopian natural is absolutely stunning. Wild blueberry and jasmine in every sip.",
+    "date": "2026-04-08T14:30:00Z",
+    "toasts": 12
+  },
+  {
+    "id": "a2",
+    "userName": "Priya Patel",
+    "userAvatar": "👩‍🔬",
+    "userProfile": "The Connoisseur",
+    "action": "reviewed",
+    "beanId": 23,
+    "rating": 4,
+    "comment": "Rich body with hints of dark chocolate. Perfect for a morning pour-over.",
+    "date": "2026-04-08T10:15:00Z",
+    "toasts": 8
+  },
+  {
+    "id": "a3",
+    "userName": "Marcus Johnson",
+    "userAvatar": "🧔",
+    "userProfile": "The Comforter",
+    "action": "tried",
+    "beanId": 45,
+    "rating": 4,
+    "comment": "Smooth and nutty, exactly what I needed on a rainy day.",
+    "date": "2026-04-07T16:45:00Z",
+    "toasts": 5
+  },
+  {
+    "id": "a4",
+    "userName": "Sarah Kim",
+    "userAvatar": "👩‍🎨",
+    "userProfile": "The Adventurer",
+    "action": "loved",
+    "beanId": 12,
+    "rating": 5,
+    "comment": "The natural processing gives this such a funky, wine-like character. I'm obsessed!",
+    "date": "2026-04-07T09:20:00Z",
+    "toasts": 19
+  },
+  {
+    "id": "a5",
+    "userName": "David Torres",
+    "userAvatar": "🧑‍🍳",
+    "userProfile": "The Sweetheart",
+    "action": "badge",
+    "badgeId": "globe-trotter",
+    "comment": "Just unlocked Globe Trotter! 5 countries and counting.",
+    "date": "2026-04-06T18:00:00Z",
+    "toasts": 24
+  },
+  {
+    "id": "a6",
+    "userName": "Emma Wilson",
+    "userAvatar": "👱‍♀️",
+    "userProfile": "The Purist",
+    "action": "reviewed",
+    "beanId": 67,
+    "rating": 5,
+    "comment": "Clean cup, beautiful balance, delicate floral notes. This is what specialty coffee is all about.",
+    "date": "2026-04-06T11:30:00Z",
+    "toasts": 15
+  },
+  {
+    "id": "a7",
+    "userName": "Jordan Lee",
+    "userAvatar": "🧑‍🎤",
+    "userProfile": "The Crowd-Pleaser",
+    "action": "ordered",
+    "beanId": 89,
+    "comment": "Ordered a 2lb bag. This one's a crowd favorite for our office.",
+    "date": "2026-04-05T13:00:00Z",
+    "toasts": 7
+  },
+  {
+    "id": "a8",
+    "userName": "Olivia Brown",
+    "userAvatar": "👩‍💼",
+    "userProfile": "The Explorer",
+    "action": "tried",
+    "beanId": 100,
+    "rating": 3,
+    "comment": "Interesting flavor profile but a bit too acidic for my taste. Great aroma though!",
+    "date": "2026-04-05T08:45:00Z",
+    "toasts": 3
+  },
+  {
+    "id": "a9",
+    "userName": "Noah Garcia",
+    "userAvatar": "🧑‍🌾",
+    "userProfile": "The Comforter",
+    "action": "loved",
+    "beanId": 34,
+    "rating": 5,
+    "comment": "Full-bodied Brazilian with incredible sweetness. Reminds me of my grandmother's kitchen.",
+    "date": "2026-04-04T15:20:00Z",
+    "toasts": 21
+  },
+  {
+    "id": "a10",
+    "userName": "Mia Thompson",
+    "userAvatar": "👩‍🏫",
+    "userProfile": "The Connoisseur",
+    "action": "badge",
+    "badgeId": "score-chaser",
+    "comment": "Finally tried a 90+ scorer! The complexity is unreal.",
+    "date": "2026-04-04T10:00:00Z",
+    "toasts": 16
+  }
+]

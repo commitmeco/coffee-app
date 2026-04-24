@@ -75,7 +75,7 @@ export default function BeanCatalog({
       {/* Section header */}
       <div className="flex items-center gap-3 mb-6">
         <h2 className="font-serif text-2xl font-bold text-espresso">All Beans</h2>
-        <div className="flex-1 h-px bg-cream-dark" />
+        <div className="flex-1 h-px bg-white/[0.06]" />
         <p className="text-sm text-roast-light">
           {filtered.length.toLocaleString()} bean{filtered.length !== 1 ? "s" : ""}
         </p>
@@ -114,7 +114,7 @@ export default function BeanCatalog({
           </p>
           <button
             onClick={clearAllFilters}
-            className="px-5 py-2.5 bg-espresso text-cream rounded-full hover:bg-espresso-light transition-colors text-sm font-medium"
+            className="px-5 py-2.5 bg-[#E8E4E0] text-[#0F0F0F] rounded-full hover:bg-white/20 transition-colors text-sm font-medium"
           >
             Clear all filters
           </button>
@@ -133,7 +133,7 @@ export default function BeanCatalog({
             <div className="text-center mt-12">
               {/* Progress bar */}
               <div className="max-w-xs mx-auto mb-3">
-                <div className="h-1 bg-cream-dark rounded-full overflow-hidden">
+                <div className="h-1 bg-white/[0.06] rounded-full overflow-hidden">
                   <div
                     className="h-full bg-caramel rounded-full transition-all duration-500"
                     style={{ width: `${(visibleCount / filtered.length) * 100}%` }}
@@ -145,7 +145,7 @@ export default function BeanCatalog({
               </div>
               <button
                 onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                className="px-8 py-3 bg-white border-2 border-espresso text-espresso rounded-full hover:bg-espresso hover:text-cream transition-all text-sm font-medium"
+                className="px-8 py-3 bg-[var(--color-surface)] border-2 border-white/[0.08] text-espresso rounded-full hover:bg-white/[0.06] transition-all text-sm font-medium"
               >
                 Load more
               </button>

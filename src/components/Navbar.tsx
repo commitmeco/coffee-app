@@ -2,153 +2,153 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useDiary } from "@/components/DiaryProvider";
+import { useCart } from "@/components/CartProvider";
+import CartDrawer from "@/components/CartDrawer";
+
+const NAV_LINKS = [
+  { href: "/",          label: "Home" },
+  { href: "#magazine",  label: "Magazine" },
+  { href: "/beans",     label: "Beans" },
+  { href: "/shops",     label: "Shops" },
+  { href: "/brew-guide",label: "Brew Guide" },
+  { href: "/quiz",      label: "Flavor Quiz" },
+  { href: "/diary",     label: "My Diary" },
+];
+
+const TICKER_ITEMS = [
+  "☕ NEW: The Women Who Saved Heirloom Coffee — Ethiopia Report",
+  "🌍 Exclusive: Inside Panama's Gesha Valley with Don Pachi",
+  "🏆 World Barista Championship Preview — Tokyo 2025",
+  "🫘 New Bean Drop: Rwanda Bourbon Peaberry — Limited Edition",
+  "📍 Just Published: 3 Days in Oaxaca — The Coffee Itinerary",
+];
 
 export default function Navbar() {
+  const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter();
-  const { entries, hydrated } = useDiary();
-  const diaryCount = hydrated ? Object.keys(entries).length : 0;
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery("");
-      setSearchOpen(false);
-      setMenuOpen(false);
-    }
-  }
+  const { cartCount, hydrated } = useCart();
+  const tickerContent = [...TICKER_ITEMS, ...TICKER_ITEMS];
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-espresso/95 text-cream shadow-lg">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <span className="text-2xl">☕</span>
-          <span className="font-serif text-xl font-bold tracking-tight group-hover:text-caramel-light transition-colors">
-            Coffee App
-          </span>
-        </Link>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6 text-sm">
-          <Link href="/" className="hover:text-caramel-light transition-colors">
-            Browse Beans
-          </Link>
-          <Link href="/diary" className="hover:text-caramel-light transition-colors flex items-center gap-1.5">
-            My Diary
-            {diaryCount > 0 && (
-              <span className="bg-caramel text-espresso text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-scale-in">
-                {diaryCount}
-              </span>
-            )}
-          </Link>
-          <Link href="/#about" className="hover:text-caramel-light transition-colors">
-            About
-          </Link>
-
-          {/* Desktop search toggle */}
-          <div className="relative">
-            {searchOpen ? (
-              <form onSubmit={handleSearch} className="flex items-center animate-fade-in">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search beans..."
-                  autoFocus
-                  className="w-48 bg-espresso-light/60 border border-cream/20 rounded-full px-4 py-1.5 text-sm text-cream placeholder:text-cream/40 focus:outline-none focus:border-caramel/50"
-                />
-                <button
-                  type="button"
-                  onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
-                  className="ml-2 text-cream/60 hover:text-cream"
-                  aria-label="Close search"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-1.5 rounded-full hover:bg-espresso-light/50 transition-colors"
-                aria-label="Open search"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden p-2 rounded-lg hover:bg-espresso-light/50 transition-colors"
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-        >
-          <div className="w-5 h-4 relative flex flex-col justify-between">
-            <span className={`block h-0.5 w-full bg-cream rounded-full transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[7px]" : ""}`} />
-            <span className={`block h-0.5 w-full bg-cream rounded-full transition-opacity duration-200 ${menuOpen ? "opacity-0" : ""}`} />
-            <span className={`block h-0.5 w-full bg-cream rounded-full transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`} />
-          </div>
-        </button>
-      </div>
-
-      {/* Mobile menu */}
+    <>
+      {/* News Ticker — caramel accent bar */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          menuOpen ? "max-h-64 border-t border-cream/10" : "max-h-0"
-        }`}
+        className="overflow-hidden whitespace-nowrap text-[0.7rem] font-semibold tracking-[0.1em] uppercase py-1.5"
+        style={{ background: "var(--color-caramel)", color: "white" }}
+        aria-label="Latest stories ticker"
       >
-        <div className="px-4 py-4 space-y-1">
-          {/* Mobile search */}
-          <form onSubmit={handleSearch} className="mb-3">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search beans..."
-              className="w-full bg-espresso-light/60 border border-cream/20 rounded-full px-4 py-2.5 text-sm text-cream placeholder:text-cream/40 focus:outline-none focus:border-caramel/50"
-            />
-          </form>
-
-          <Link
-            href="/"
-            onClick={() => setMenuOpen(false)}
-            className="block py-3 px-3 rounded-lg text-cream hover:bg-espresso-light/50 transition-colors"
-          >
-            Browse Beans
-          </Link>
-          <Link
-            href="/diary"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 py-3 px-3 rounded-lg text-cream hover:bg-espresso-light/50 transition-colors"
-          >
-            My Diary
-            {diaryCount > 0 && (
-              <span className="bg-caramel text-espresso text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                {diaryCount}
-              </span>
-            )}
-          </Link>
-          <Link
-            href="/#about"
-            onClick={() => setMenuOpen(false)}
-            className="block py-3 px-3 rounded-lg text-cream hover:bg-espresso-light/50 transition-colors"
-          >
-            About
-          </Link>
+        <div className="omc-ticker-inner inline-flex gap-0">
+          {tickerContent.map((item, i) => (
+            <span key={i} className="px-8 inline-flex items-center gap-4">
+              {item}
+              <span className="opacity-50">◆</span>
+            </span>
+          ))}
         </div>
       </div>
-    </nav>
+
+      {/* Masthead */}
+      <header
+        className="sticky top-0 z-[200] border-b"
+        style={{ background: "var(--color-paper)", borderColor: "var(--color-border)" }}
+      >
+        <div className="max-w-[1280px] mx-auto px-6 md:px-10 h-[68px] flex items-center gap-6">
+
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0 group leading-none">
+            <div
+              className="font-serif text-[1.55rem] font-bold tracking-[-0.01em] leading-none"
+              style={{ color: "var(--color-espresso-light)" }}
+            >
+              One <span style={{ color: "var(--color-caramel)" }}>More</span> Cup
+            </div>
+            <div
+              className="text-[0.55rem] tracking-[0.22em] uppercase font-semibold mt-0.5"
+              style={{ color: "var(--color-roast-light)" }}
+            >
+              The Specialty Coffee Journal
+            </div>
+          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-6 ml-auto">
+            {NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-[0.78rem] font-semibold tracking-[0.04em] uppercase transition-colors"
+                style={{ color: "var(--color-roast-light)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-caramel)")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-roast-light)")}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Actions */}
+          <div className="flex items-center gap-2 ml-auto lg:ml-4">
+            <Link
+              href="/quiz"
+              className="hidden sm:inline-flex text-[0.72rem] font-bold tracking-[0.06em] uppercase px-4 py-2 rounded-sm transition-all"
+              style={{ background: "var(--color-caramel)", color: "white" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-espresso-light)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-caramel)"; }}
+            >
+              Take the Quiz
+            </Link>
+
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative w-[38px] h-[38px] rounded-full flex items-center justify-center text-base transition-all cursor-pointer border"
+              style={{ borderColor: "var(--color-border)", color: "var(--color-roast)", background: "transparent" }}
+              aria-label="Open cart"
+            >
+              🛒
+              {hydrated && cartCount > 0 && (
+                <span
+                  className="absolute -top-[3px] -right-[3px] w-[18px] h-[18px] rounded-full flex items-center justify-center text-[0.62rem] font-bold text-white"
+                  style={{ background: "var(--color-caramel)" }}
+                >
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden w-[38px] h-[38px] flex flex-col justify-center items-center gap-[5px] cursor-pointer"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+            >
+              {[0, 1, 2].map((i) => (
+                <span key={i} className="block w-5 h-[2px] rounded-full" style={{ background: "var(--color-roast)" }} />
+              ))}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="lg:hidden border-t" style={{ background: "var(--color-paper)", borderColor: "var(--color-border)" }}>
+            <nav className="max-w-[1280px] mx-auto px-6 py-4 flex flex-col gap-3">
+              {NAV_LINKS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-[0.85rem] font-semibold py-1"
+                  style={{ color: "var(--color-roast)" }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        )}
+      </header>
+
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+    </>
   );
 }

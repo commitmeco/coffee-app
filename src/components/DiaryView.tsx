@@ -56,7 +56,7 @@ export default function DiaryView({ beans }: { beans: Bean[] }) {
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <h1 className="font-serif text-3xl font-bold text-espresso">My Coffee Diary</h1>
-        <div className="flex-1 h-px bg-cream-dark" />
+        <div className="flex-1 h-px bg-white/[0.06]" />
         <p className="text-sm text-roast-light">
           {entryCount} bean{entryCount !== 1 ? "s" : ""}
         </p>
@@ -73,8 +73,8 @@ export default function DiaryView({ beans }: { beans: Bean[] }) {
             onClick={() => setStatusFilter(opt.value)}
             className={`px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all ${
               statusFilter === opt.value
-                ? "bg-espresso text-cream border-espresso shadow-sm"
-                : "bg-white text-espresso-light border-cream-dark hover:border-caramel hover:text-espresso"
+                ? "bg-[#E8E4E0] text-[#0F0F0F] border-[#E8E4E0] shadow-sm"
+                : "bg-[var(--color-surface)] text-espresso-light border-[var(--color-border)] hover:border-caramel hover:text-espresso"
             }`}
           >
             {opt.label}
@@ -97,7 +97,7 @@ export default function DiaryView({ beans }: { beans: Bean[] }) {
           {entryCount === 0 && (
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-espresso text-cream rounded-full hover:bg-espresso-light transition-colors text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#E8E4E0] text-[#0F0F0F] rounded-full hover:bg-white/20 transition-colors text-sm font-medium"
             >
               Browse Beans
             </Link>

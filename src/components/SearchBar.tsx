@@ -37,14 +37,14 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
         onFocus={() => setFocused(true)}
         onBlur={() => setTimeout(() => setFocused(false), 200)}
         placeholder="Search by country, region, variety..."
-        className="w-full pl-11 pr-10 py-3 rounded-full border border-cream-dark bg-white text-espresso placeholder:text-roast-light/40 focus:outline-none focus:ring-2 focus:ring-caramel/30 focus:border-caramel focus:shadow-md"
+        className="w-full pl-11 pr-10 py-3 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] text-espresso placeholder:text-roast-light/40 focus:outline-none focus:ring-2 focus:ring-caramel/30 focus:border-caramel focus:shadow-md"
       />
 
       {/* Clear button */}
       {value && (
         <button
           onClick={() => onChange("")}
-          className="absolute right-4 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-roast-light/60 hover:text-espresso hover:bg-cream-dark"
+          className="absolute right-4 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-roast-light/60 hover:text-espresso hover:bg-white/[0.06]"
           aria-label="Clear search"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

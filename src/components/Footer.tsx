@@ -1,86 +1,117 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-espresso text-cream-dark mt-16">
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <footer
+      className="border-t mt-20"
+      style={{ background: "var(--color-espresso-light)", borderColor: "var(--color-caramel)", color: "rgba(253,250,246,0.55)" }}
+    >
+      <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-14 pb-4">
+        <div
+          className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-12 mb-8 border-b"
+          style={{ borderColor: "rgba(253,250,246,0.1)" }}
+        >
           {/* Brand */}
           <div>
-            <p className="font-serif text-lg font-bold text-cream mb-3">☕ Coffee App</p>
-            <p className="text-sm text-caramel-light/80 leading-relaxed max-w-xs">
-              Helping you discover amazing coffee beans from around the world.
-              Built by a team of designers and researchers using Claude Code.
-            </p>
-            <div className="flex gap-2 mt-4">
-              <span className="w-3 h-3 rounded-full bg-caramel" />
-              <span className="w-3 h-3 rounded-full bg-sage" />
-              <span className="w-3 h-3 rounded-full bg-roast-light" />
+            <div
+              className="font-serif text-[1.5rem] font-bold tracking-[-0.01em] mb-4"
+              style={{ color: "var(--color-paper)" }}
+            >
+              One <span style={{ color: "var(--color-caramel)" }}>More</span> Cup
             </div>
+            <p
+              className="text-[0.85rem] leading-[1.75] max-w-[260px] font-serif italic"
+              style={{ color: "rgba(253,250,246,0.5)", fontWeight: 300 }}
+            >
+              The specialty coffee journal for curious drinkers, traveling tasters, and dedicated brewers worldwide.
+            </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Magazine */}
           <div>
-            <p className="font-medium text-cream text-sm uppercase tracking-wide mb-4">Explore</p>
-            <div className="space-y-2">
-              <Link href="/" className="block text-sm text-caramel-light/80 hover:text-cream transition-colors">
-                Browse All Beans
-              </Link>
-              <Link href="/diary" className="block text-sm text-caramel-light/80 hover:text-cream transition-colors">
-                My Diary
-              </Link>
-              <Link href="/?minScore=90" className="block text-sm text-caramel-light/80 hover:text-cream transition-colors">
-                Top Rated (90+)
-              </Link>
-              <Link href="/#about" className="block text-sm text-caramel-light/80 hover:text-cream transition-colors">
-                About This Project
-              </Link>
-              <a
-                href="https://github.com/jldbc/coffee-quality-database"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-sm text-caramel-light/80 hover:text-cream transition-colors"
-              >
-                Data Sources ↗
-              </a>
-            </div>
+            <h4
+              className="text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-4"
+              style={{ color: "var(--color-caramel)" }}
+            >
+              Magazine
+            </h4>
+            <ul className="space-y-2.5 text-[0.82rem]">
+              {["Current Issue", "Archive", "Subscribe", "Advertising", "Contact"].map((item) => (
+                <li key={item}>
+                  <a href="#" className="transition-colors hover:text-white/90">{item}</a>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Newsletter Placeholder */}
+          {/* Explore */}
           <div>
-            <p className="font-medium text-cream text-sm uppercase tracking-wide mb-4">Stay in the Loop</p>
-            <p className="text-sm text-caramel-light/80 mb-3">
-              Get notified when we add new beans and features.
-            </p>
-            <form action="#" className="flex gap-2">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 bg-espresso-light border border-espresso-light rounded-full px-4 py-2 text-sm text-cream placeholder:text-caramel-light/40 focus:outline-none focus:border-caramel/50"
-              />
-              <button
-                type="submit"
-                className="bg-caramel text-espresso rounded-full px-4 py-2 text-sm font-medium hover:bg-caramel-light shrink-0"
-              >
-                Notify Me
-              </button>
-            </form>
+            <h4
+              className="text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-4"
+              style={{ color: "var(--color-caramel)" }}
+            >
+              Explore
+            </h4>
+            <ul className="space-y-2.5 text-[0.82rem]">
+              {[
+                { label: "Bean Catalog",   href: "/beans" },
+                { label: "Brew Guide",     href: "/brew-guide" },
+                { label: "Flavor Quiz",    href: "/quiz" },
+                { label: "Coffee Shops",   href: "/shops" },
+                { label: "My Diary",       href: "/diary" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} className="transition-colors hover:text-white/90">{label}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Account */}
+          <div>
+            <h4
+              className="text-[0.65rem] font-bold tracking-[0.18em] uppercase mb-4"
+              style={{ color: "var(--color-caramel)" }}
+            >
+              My Account
+            </h4>
+            <ul className="space-y-2.5 text-[0.82rem]">
+              {[
+                { label: "Coffee Diary",  href: "/diary" },
+                { label: "My Cart",       href: "#" },
+                { label: "Orders",        href: "/orders" },
+                { label: "Profile",       href: "/profile" },
+                { label: "Social Feed",   href: "/social" },
+              ].map(({ label, href }) => (
+                <li key={label}>
+                  <Link href={href} className="transition-colors hover:text-white/90">{label}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-espresso-light/50 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-caramel-light/60">
-          <span>Made with care & curiosity</span>
-          <span>
-            Bean data from the{" "}
-            <a
-              href="https://github.com/jldbc/coffee-quality-database"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-cream transition-colors"
-            >
-              Coffee Quality Institute
-            </a>
-          </span>
+        {/* Bottom bar */}
+        <div
+          className="flex flex-col sm:flex-row justify-between items-center gap-2 py-3 text-[0.72rem]"
+          style={{ color: "rgba(253,250,246,0.3)" }}
+        >
+          <p>© 2026 One More Cup. All Rights Reserved.</p>
+          <div className="flex gap-3">
+            {["𝕏", "📷", "▶", "in"].map((icon) => (
+              <button
+                key={icon}
+                className="w-[34px] h-[34px] rounded-full flex items-center justify-center text-[0.8rem] transition-all cursor-pointer border"
+                style={{ borderColor: "rgba(253,250,246,0.15)", background: "transparent", color: "rgba(253,250,246,0.45)" }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--color-caramel)"; e.currentTarget.style.color = "var(--color-caramel)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(253,250,246,0.15)"; e.currentTarget.style.color = "rgba(253,250,246,0.45)"; }}
+              >
+                {icon}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </footer>
