@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(lsof -iTCP -sTCP:LISTEN)",
+      "Read(//private/etc/**)",
+      "Bash(getent services *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(open \"http://localhost:3000/#figmacapture=1a713d85-ddff-4a8c-a127-9dfe3d4eebcb&figmaendpoint=https%3A%2F%2Fmcp.figma.com%2Fmcp%2Fcapture%2F1a713d85-ddff-4a8c-a127-9dfe3d4eebcb%2Fsubmit&figmadelay=3000\")"
+    ]
+  }
+}
